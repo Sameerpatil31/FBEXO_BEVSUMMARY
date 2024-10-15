@@ -22,7 +22,7 @@ def home():
 
 
 
-@app.route("/bevsmmary", methods = ['POST', 'GET'])
+@app.route("/bevsummary", methods = ['POST', 'GET'])
 def predict():
     try:
         if request.method == "POST":
@@ -34,6 +34,7 @@ def predict():
           
             return txt_result,200
     except Exception as e:
+        return e
         raise e
     
 
