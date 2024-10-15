@@ -3,18 +3,24 @@ import sqlite3
 from src.LlamaApp import Response_Generation
 from flask_cors import CORS
 from functools import wraps
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from the .env file
+load_dotenv()
 
 
 
 
 
+#'BevSummary2024'
 
 
 obj = Response_Generation()
 
 app = Flask(__name__)
 CORS(app)
-app.config['API_KEY'] = 'BevSummary2024'
+app.config['API_KEY'] =   os.getenv('bev-api-key')
 
 @app.route("/")
 def home():
