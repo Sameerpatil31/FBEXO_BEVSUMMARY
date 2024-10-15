@@ -22,7 +22,7 @@ def home():
 
 
 
-@app.route("/response", methods = ['POST', 'GET'])
+@app.route("/bevsmmary", methods = ['POST', 'GET'])
 def predict():
     try:
         if request.method == "POST":
@@ -41,10 +41,10 @@ def predict():
 
 
 # API endpoint to return items for dropdown
-@app.route('/dropdown', methods=['GET'])
+@app.route('/businesstype', methods=['GET'])
 def get_dropdown_items():
     items = obj.get_items_from_db()  # Get items from the database
-    return jsonify(items)  # Return the items as a JSON response    
+    return items  # Return the items as a JSON response    
 
 
 

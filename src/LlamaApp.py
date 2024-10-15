@@ -40,7 +40,7 @@ class Response_Generation:
         conn.close()
         
         # Convert data to a list of dictionaries
-        return [{"Industry_Name(PE_Ratio)": item[0]} for item in items]    
+        return [item[0] for item in items]    
 
 
 
