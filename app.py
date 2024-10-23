@@ -52,14 +52,15 @@ def predict():
         if request.method == "POST":
 
             data = request.get_json()
+            print(type(data))
             print(data)
             txt_result = obj.respone_result(data)
-            print(txt_result)
+            # print(txt_result)
           
-            return txt_result,200
+            return jsonify({"result":txt_result})
     except Exception as e:
-        return e
-        raise e
+        # Handle the OperationalError and return a valid response
+        return jsonify({"error": str(e)}), 500
     
 
 
@@ -79,4 +80,4 @@ def get_dropdown_items():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080,debug=True)

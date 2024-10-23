@@ -1,3 +1,4 @@
 bev_env
 .env
 src.egg-info
+src\__pycache__

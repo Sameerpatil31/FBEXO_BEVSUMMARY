@@ -1,6 +1,7 @@
 
 from langchain_huggingface import HuggingFaceEndpoint
-from src.Prompt import PROMPT_SYSTEM_USER_ASSISTANT
+from src.Prompt import PROMPT_SYSTEM_USER_ASSISTANT,system_promt
+from src.utils import *
 from langchain import PromptTemplate, LLMChain
 import sqlite3
 import pandas as pd
@@ -29,18 +30,18 @@ class Response_Generation:
 
 
 
-    def get_items_from_db(self):
-        conn = sqlite3.connect(self._sqlite_DB_Path)
-        c = conn.cursor()
+    # def get_items_from_db(self):
+    #     conn = sqlite3.connect(self._sqlite_DB_Path)
+    #     c = conn.cursor()
         
-        # Fetch all items
-        c.execute('SELECT Industry_Name FROM BEV')
-        items = c.fetchall()
+    #     # Fetch all items
+    #     c.execute('SELECT Industry_Name FROM BEV')
+    #     items = c.fetchall()
         
-        conn.close()
+    #     conn.close()
         
-        # Convert data to a list of dictionaries
-        return [item[0] for item in items]    
+    #     # Convert data to a list of dictionaries
+    #     return [item[0] for item in items]    
 
 
 
@@ -48,7 +49,7 @@ class Response_Generation:
 
 
 
-    def parse_json(self,data_json:json) -> list:
+    def parse_json(self,jdata):
 
         """ 
         Prosses json data and return as list
@@ -57,90 +58,128 @@ class Response_Generation:
 
         try:
 
-            print(data_json)
+            # print(f"This is from json parse function{jdata}")
 
-            # data_json = json.loads(f"{json_data}")
-            # print(data_json)
-            zip_code = data_json['zipCode'],
-            business_type = data_json['businessType'],
-            revenue = data_json['financialMetrics']['revenue'],
-            expenses = data_json['financialMetrics']['expenses'],
-            ebitda = data_json['financialMetrics']['ebitda'],
-            current_assets = data_json['financialMetrics']['assets']['current'],
-            fixed_assets = data_json['financialMetrics']['assets']['fixed'],
-            current_liabilities = data_json['financialMetrics']['liabilities']['current'],
-            long_term_liabilities = data_json['financialMetrics']['liabilities']['longTerm']
+            # jdata = json.loads(f"""{jdata}""")
+            print(type(jdata))
+            zipCode = jdata['zipCode']
+            businessType = jdata['businessType']
+            currency = jdata['currency']
+            financial_year_1 = jdata['financialMetrics']['years'][0]
+            financial_year_2 = jdata['financialMetrics']['years'][1]
+            financial_year_3 = jdata['financialMetrics']['years'][2]
+            revenues=jdata['financialMetrics']['revenue']
+            expenses=jdata['financialMetrics']['expenses']
+        
+            current_assets_financial_year=jdata['financialMetrics']['assets']['current']
+        
+            total_assets_financial_year= jdata['financialMetrics']['assets']['total']
+        
+            current_liabilities_financial_year= jdata['financialMetrics']['liabilities']['current']
+        
+            total_liabilities_financial_year= jdata['financialMetrics']['liabilities']['total']
 
-            User_Data_list = {"zip_code":zip_code,
-                              "business_type":business_type,
-                              "revenue":revenue,
+            User_Data_list = {"zipCode":zipCode,
+                              "businessType":businessType,
+                              "currency":currency,
                               "expenses":expenses,
-                              "ebitda":ebitda,
-                              "current_assets":current_assets,
-                              "fixed_assets":fixed_assets,
-                              "current_liabilities":current_liabilities,
-                              "long_term_liabilities":long_term_liabilities}
+                              "financial_year_1":financial_year_1,
+                              "financial_year_2":financial_year_2,
+                              "financial_year_3":financial_year_3,
+                              "revenues":revenues,
+                              "current_assets_financial_year":current_assets_financial_year,
+                              "total_assets_financial_year":total_assets_financial_year,
+                              "current_liabilities_financial_year":current_liabilities_financial_year,
+                              "total_liabilities_financial_year":total_liabilities_financial_year}
             # data = [item[0] if isinstance(item, tuple) else item for item in User_Data_list]
-            # print(data)
-            print(User_Data_list)
+            print(type(User_Data_list))
+            print(f"This is return of json parse data {dict(User_Data_list)}")
 
             return User_Data_list
         
         except Exception as e:
+            print(f"error: {e}")
             raise e
         
 
-    def ratio_data(self,bussinesstype)->list:
-
-        """
-        Retrive data from sqlite and return as list
-        """
-
-        try:
-            conn = sqlite3.connect(self._sqlite_DB_Path)
-            query = 'SELECT * FROM BEV WHERE Industry_Name = ?'
-            df_from_db = pd.read_sql(sql=query,con= conn,params=(bussinesstype,))
-            conn.close()
-
-            print(df_from_db)
-
-            Discount_Rate = df_from_db[['Cost_of_Capital(Discount_rate)']].iloc[0,0]
-            PE_Ratio = df_from_db[['Trailing_PE(PE_Ratio)']].iloc[0,0]
-            Industry_Multiplier = df_from_db[['PBV(Industry_multiplier)']].iloc[0,0]
-            Earnings_Multiplier = df_from_db[['EV/EBITDA(Earning_multiplier)']].iloc[0,0]
-
-            list_ratio_data = [Discount_Rate,PE_Ratio,Industry_Multiplier,Earnings_Multiplier]
-            print(list_ratio_data)
-            # data = [item[0] if isinstance(item, tuple) else item for item in list_ratio_data]
-            # print(data)
-
-            return list_ratio_data
-
-        except Exception as e:
-            raise e    
+    
         
 
-    def all_imput_data(self,userdata:list,ratiodata:list)->dict:
+    def all_imput_data(self,userdata)->dict:
+            print(userdata)
+            df_dat = get_data_sql(userdata["businessType"])
+            Discount_Rate =float(df_dat[1].replace("%",""))
+            PE_Ratio =float(df_dat[2].replace("%",""))
+            Industry_Multiplier = float(df_dat[3].replace("%",""))
+            Earnings_Multiplier = float(df_dat[4].replace("%",""))
+            Result_1,Result_2,Result_3,Result_Final = method_1(userdata["current_assets_financial_year"],userdata["total_assets_financial_year"],userdata["current_liabilities_financial_year"],userdata["total_liabilities_financial_year"])
+            Net_Profit_Year,Net_Profit_result = method_3(userdata["revenues"],userdata["expenses"],PE_Ratio)
+            print(f"Method 3 :{Net_Profit_Year,Net_Profit_result}")
+            Net_Profit_Year_1 =Net_Profit_Year[0]
+            Net_Profit_Year_2 =Net_Profit_Year[1]
+            Net_Profit_Year_3 =Net_Profit_Year[2]
+            Net_Profit_result_1 = Net_Profit_result[0]
+            Net_Profit_result_2 = Net_Profit_result[1]
+            Net_Profit_result_3 = Net_Profit_result[2]
+            Gross_revenu_result =method_4(userdata["revenues"],Industry_Multiplier)
+            print(f"Method 4 :{Gross_revenu_result}")
+            Gross_revenu_Year_1 = userdata["revenues"][0]
+            Gross_revenu_Year_2 = userdata["revenues"][1]
+            Gross_revenu_Year_3 = userdata["revenues"][2]
+            Gross_revenu_result_1 = Gross_revenu_result[0]
+            Gross_revenu_result_2 = Gross_revenu_result[1]
+            Gross_revenu_result_3 = Gross_revenu_result[2]
+            Net_earning_result= method_5(userdata["revenues"],userdata["expenses"],Earnings_Multiplier)
+            print(f"Method 5 :{Net_earning_result}")
+            Net_earning_result_1 = Net_earning_result[0]
+            Net_earning_result_2 = Net_earning_result[1] 
+            Net_earning_result_3 = Net_earning_result[2]  
+            Liquidation_Value  = method_6(userdata["current_assets_financial_year"],userdata["current_liabilities_financial_year"])
+            print(f"Method 6 :{Liquidation_Value}")
+            Liquidation_Value_1 = Liquidation_Value[0]
+            Liquidation_Value_2 = Liquidation_Value[1]
+            Liquidation_Value_3 = Liquidation_Value[2]
 
-        input_data = {
-
-            "zip_code": userdata['zip_code'],
-            "business_type": userdata['business_type'],
-            "revenue": userdata['revenue'],
-            "expenses": userdata['expenses'],
-            "ebitda": userdata['ebitda'],
-            "current_assets": userdata['current_assets'],
-            "fixed_assets": userdata['fixed_assets'],
-            "current_liabilities": userdata['current_liabilities'],
-            "long_term_liabilities": userdata['long_term_liabilities'],
-            "Discount_Rate": ratiodata[0],
-            "PE_Ratio" : ratiodata[1],
-            "Industry_Multiplier": ratiodata[2],
-            "Earnings_Multiplier" : ratiodata[3]
+            input_params = {
+            "zipCode" : userdata["zipCode"],
+            "businessType" : userdata["businessType"],
+            "currency" : userdata["currency"],
+            "Year_1" : userdata['financial_year_1'],
+            "Year_2" : userdata['financial_year_2'],
+            "Year_3" : userdata['financial_year_3'],
+            "Result_1" : Result_1,
+            "Result_2" : Result_2,
+            "Result_3" : Result_3,
+            "Result_Final" : Result_Final,
+            "Net_Profit_Year_1" : Net_Profit_Year_1,
+            "Net_Profit_Year_2" : Net_Profit_Year_2,
+            "Net_Profit_Year_3" : Net_Profit_Year_3,
+            "Net_Profit_result_1" : Net_Profit_result_1,
+            "Net_Profit_result_2" : Net_Profit_result_2,  
+            "Net_Profit_result_3" : Net_Profit_result_3,  
+            "Gross_revenu_Year_1" : Gross_revenu_Year_1,
+            "Gross_revenu_Year_2" : Gross_revenu_Year_2,
+            "Gross_revenu_Year_3" : Gross_revenu_Year_3,
+            "Gross_revenu_result_1" : Gross_revenu_result_1,
+            "Gross_revenu_result_2" : Gross_revenu_result_2,
+            "Gross_revenu_result_3" : Gross_revenu_result_3,
+            "Net_Profit_Year_1" : Net_Profit_Year_1,
+            "Net_Profit_Year_2" : Net_Profit_Year_2,
+            "Net_Profit_Year_3" : Net_Profit_Year_3,
+            "Net_earning_result_1" : Net_earning_result_1,
+            "Net_earning_result_2" : Net_earning_result_2,
+            "Net_earning_result_3" : Net_earning_result_3,
+            "Liquidation_Value_1" : Liquidation_Value_1,
+            "Liquidation_Value_2" : Liquidation_Value_2,
+            "Liquidation_Value_3" : Liquidation_Value_3,
+            "Discount_Rate": Discount_Rate,
+            "PE_Ratio" : PE_Ratio,
+            "Industry_Multiplier": Industry_Multiplier,
+            "Earnings_Multiplier" :Earnings_Multiplier
 
         }
 
-        return input_data
+            return input_params
     
     
     def load_model(self,repo_id,max_new_tokens,top_k,top_p,temperature,huggingfacehub_api_token):
@@ -170,7 +209,7 @@ class Response_Generation:
 
             llm = self.load_model(repo_id='meta-llama/Meta-Llama-3.1-8B-Instruct',
                             
-                            max_new_tokens=1200,
+                            max_new_tokens=5000,
                             top_k=10,
                             top_p=0.25,
                             temperature=0.20,
@@ -178,16 +217,16 @@ class Response_Generation:
                             )
 
             user_data = self.parse_json(jsondata)
-            bussnesstype = user_data['business_type']
+            # bussnesstype = user_data['business_type']
 
             
 
-            print(bussnesstype[0])
-            ratio_data_list = self.ratio_data(bussnesstype[0])
+            # print(bussnesstype[0])
+            # ratio_data_list = self.ratio_data(bussnesstype[0])
 
-            input_param = self.all_imput_data(userdata=user_data,ratiodata=ratio_data_list)
+            input_param = self.all_imput_data(userdata=user_data)
 
-            promt= PromptTemplate.from_template(PROMPT_SYSTEM_USER_ASSISTANT)
+            promt= PromptTemplate.from_template(system_promt)
 
             ll_chain = LLMChain(llm = llm, prompt = promt)
             data  = ll_chain.invoke(input_param)
