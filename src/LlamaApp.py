@@ -30,18 +30,18 @@ class Response_Generation:
 
 
 
-    # def get_items_from_db(self):
-    #     conn = sqlite3.connect(self._sqlite_DB_Path)
-    #     c = conn.cursor()
+    def get_items_from_db(self):
+        conn = sqlite3.connect(self._sqlite_DB_Path)
+        c = conn.cursor()
         
-    #     # Fetch all items
-    #     c.execute('SELECT Industry_Name FROM BEV')
-    #     items = c.fetchall()
+        # Fetch all items
+        c.execute('SELECT Industry_Name FROM BEV')
+        items = c.fetchall()
         
-    #     conn.close()
+        conn.close()
         
-    #     # Convert data to a list of dictionaries
-    #     return [item[0] for item in items]    
+        # Convert data to a list of dictionaries
+        return [item[0] for item in items]    
 
 
 
