@@ -210,9 +210,9 @@ class Response_Generation:
             llm = self.load_model(repo_id='meta-llama/Meta-Llama-3.1-8B-Instruct',
                             
                             max_new_tokens=5000,
-                            top_k=10,
-                            top_p=0.25,
-                            temperature=0.20,
+                            top_k=9,
+                            top_p=0.30,
+                            temperature=0.10,
                             huggingfacehub_api_token=self._hf_token
                             )
 
