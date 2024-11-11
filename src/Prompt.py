@@ -232,7 +232,7 @@ BEV for the Retail-CPG <Business Type> business is as follows:
 
 Method 1. Asset-Based Valuation :
 
-                 2023                2022           2021           Final
+                 2021                2022           2023           Final
 
                1100000             1000000         100000         15000
 
@@ -254,7 +254,7 @@ Method 3. Comparable Company Analysis (CCA)
 
    
    
-      2023                2022           2021          
+      2021                2022           2023          
   
     1100000             1000000         100000        
   
@@ -268,7 +268,7 @@ The CCA valuation is $5,000,000, reflecting the business's worth based on the av
 Method 4. Rule of Thumb Methods
    
 
-     2023                2022           2021          
+     2021                2022           2023          
   
     1100000             1000000         100000        
   
@@ -284,7 +284,7 @@ Method 5. Earnings Multiplier Method
   
 
    
-     2023                2022           2021          
+     2021                2022           2023          
   
     1100000             1000000         100000        
   
@@ -301,7 +301,7 @@ Method 6. Liquidation Value
 
 
      
-       2023                2022           2021          
+       2021                2022           2023          
     
       1100000             1000000         100000        
   
