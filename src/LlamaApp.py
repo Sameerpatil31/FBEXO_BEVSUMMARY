@@ -182,12 +182,12 @@ class Response_Generation:
             return input_params
     
     
-    def load_model(self,repo_id,max_new_tokens,top_k,top_p,temperature,huggingfacehub_api_token):
+    def load_model(self,endpoint_url,max_new_tokens,top_k,top_p,temperature,huggingfacehub_api_token):
 
         llm = HuggingFaceEndpoint(
 
-            # endpoint_url= self._endpoint_url,
-            repo_id= repo_id,
+            endpoint_url= endpoint_url,
+            # repo_id= repo_id,
             max_new_tokens = max_new_tokens,
             top_k = top_k,
             top_p = top_p,
@@ -207,11 +207,11 @@ class Response_Generation:
         try:
            
 
-            llm = self.load_model(repo_id='meta-llama/Meta-Llama-3.1-8B-Instruct',
+            llm = self.load_model(endpoint_url='https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/',
                             
-                            max_new_tokens=5000,
-                            top_k=9,
-                            top_p=0.30,
+                            max_new_tokens=4500,
+                            top_k=10,
+                            top_p=0.25,
                             temperature=0.10,
                             huggingfacehub_api_token=self._hf_token
                             )
