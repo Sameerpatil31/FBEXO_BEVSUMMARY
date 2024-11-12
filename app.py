@@ -60,7 +60,8 @@ def predict():
             return jsonify({"result":txt_result})
     except Exception as e:
         # Handle the OperationalError and return a valid response
-        return jsonify({"error": str(e)}), 500
+        app.logger.error(f"Error {e}")
+        return jsonify({"error": str(e)})
     
 
 
@@ -80,4 +81,4 @@ def get_dropdown_items():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080,debug=True)

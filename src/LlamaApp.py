@@ -93,8 +93,8 @@ class Response_Generation:
                               "current_liabilities_financial_year":current_liabilities_financial_year,
                               "total_liabilities_financial_year":total_liabilities_financial_year}
             # data = [item[0] if isinstance(item, tuple) else item for item in User_Data_list]
-            print(type(User_Data_list))
-            print(f"This is return of json parse data {dict(User_Data_list)}")
+            # print(type(User_Data_list))
+            # print(f"This is return of json parse data {dict(User_Data_list)}")
 
             return User_Data_list
         
@@ -107,7 +107,7 @@ class Response_Generation:
         
 
     def all_imput_data(self,userdata)->dict:
-            print(userdata)
+            # print(userdata)
             df_dat = get_data_sql(userdata["businessType"])
             Discount_Rate =float(df_dat[1].replace("%",""))
             PE_Ratio =float(df_dat[2].replace("%",""))
@@ -115,7 +115,7 @@ class Response_Generation:
             Earnings_Multiplier = float(df_dat[4].replace("%",""))
             Result_1,Result_2,Result_3,Result_Final = method_1(userdata["current_assets_financial_year"],userdata["total_assets_financial_year"],userdata["current_liabilities_financial_year"],userdata["total_liabilities_financial_year"])
             Net_Profit_Year,Net_Profit_result = method_3(userdata["revenues"],userdata["expenses"],PE_Ratio)
-            print(f"Method 3 :{Net_Profit_Year,Net_Profit_result}")
+            # print(f"Method 3 :{Net_Profit_Year,Net_Profit_result}")
             Net_Profit_Year_1 =Net_Profit_Year[0]
             Net_Profit_Year_2 =Net_Profit_Year[1]
             Net_Profit_Year_3 =Net_Profit_Year[2]
@@ -123,7 +123,7 @@ class Response_Generation:
             Net_Profit_result_2 = Net_Profit_result[1]
             Net_Profit_result_3 = Net_Profit_result[2]
             Gross_revenu_result =method_4(userdata["revenues"],Industry_Multiplier)
-            print(f"Method 4 :{Gross_revenu_result}")
+            # print(f"Method 4 :{Gross_revenu_result}")
             Gross_revenu_Year_1 = userdata["revenues"][0]
             Gross_revenu_Year_2 = userdata["revenues"][1]
             Gross_revenu_Year_3 = userdata["revenues"][2]
@@ -131,12 +131,12 @@ class Response_Generation:
             Gross_revenu_result_2 = Gross_revenu_result[1]
             Gross_revenu_result_3 = Gross_revenu_result[2]
             Net_earning_result= method_5(userdata["revenues"],userdata["expenses"],Earnings_Multiplier)
-            print(f"Method 5 :{Net_earning_result}")
+            # print(f"Method 5 :{Net_earning_result}")
             Net_earning_result_1 = Net_earning_result[0]
             Net_earning_result_2 = Net_earning_result[1] 
             Net_earning_result_3 = Net_earning_result[2]  
             Liquidation_Value  = method_6(userdata["current_assets_financial_year"],userdata["current_liabilities_financial_year"])
-            print(f"Method 6 :{Liquidation_Value}")
+            # print(f"Method 6 :{Liquidation_Value}")
             Liquidation_Value_1 = Liquidation_Value[0]
             Liquidation_Value_2 = Liquidation_Value[1]
             Liquidation_Value_3 = Liquidation_Value[2]
@@ -194,6 +194,7 @@ class Response_Generation:
             top_p = top_p,
             temperature = temperature,
             huggingfacehub_api_token = self._hf_token,
+            timeout=300,
            
         )
         # print(f"ht_token { self._hf_token}")
