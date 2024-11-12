@@ -207,9 +207,9 @@ class Response_Generation:
         try:
            
 
-            llm = self.load_model(endpoint_url='https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/',
+            llm = self.load_model(endpoint_url='https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud',
                             
-                            max_new_tokens=4000,
+                            max_new_tokens=4500,
                             top_k=10,
                             top_p=0.25,
                             temperature=0.10,
