@@ -19,7 +19,7 @@ load_dotenv()
 obj = Response_Generation(os.getenv('HUGGINGFACEHUB_API_TOKEN'))
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,allow_headers="*")
 app.config['API_KEY'] =   os.getenv('bev-api-key')
 
 @app.route("/")

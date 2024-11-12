@@ -62,7 +62,7 @@ class Response_Generation:
             # print(f"This is from json parse function{jdata}")
 
             # jdata = json.loads(f"""{jdata}""")
-            print(type(jdata))
+            # print(type(jdata))
             zipCode = jdata['zipCode']
             businessType = jdata['businessType']
             currency = jdata['currency']
