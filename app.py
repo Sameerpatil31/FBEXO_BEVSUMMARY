@@ -24,7 +24,7 @@ app.config['API_KEY'] =   os.getenv('bev-api-key')
 
 @app.route("/")
 def home():
-    return 'BEV REPORT'
+    return 'BEV'
 
 
 
