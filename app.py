@@ -16,10 +16,10 @@ load_dotenv()
 #'BevSummary2024'
 
 
-obj = Response_Generation()
+obj = Response_Generation(os.getenv('HUGGINGFACEHUB_API_TOKEN'))
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 app.config['API_KEY'] =   os.getenv('bev-api-key')
 
 @app.route("/")
@@ -52,8 +52,8 @@ def predict():
         if request.method == "POST":
 
             data = request.get_json()
-            print(type(data))
-            print(data)
+            # print(type(data))
+            # print(data)
             txt_result = obj.respone_result(data)
             # print(txt_result)
           
@@ -80,4 +80,4 @@ def get_dropdown_items():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080,debug=True)

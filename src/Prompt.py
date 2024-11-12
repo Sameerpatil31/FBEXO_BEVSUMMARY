@@ -186,8 +186,8 @@ Make sure your summary should be based on above calculation only.
 """
 
 
-
-system_promt = """
+def createpromt():
+   system_promt = """
 
 <|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
@@ -449,3 +449,5 @@ Use all currency notation from {currency}
 <|eot_id|><|start_header_id|>assistant<|end_header_id|>
 
 """
+
+   return system_promt

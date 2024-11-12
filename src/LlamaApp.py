@@ -1,6 +1,6 @@
 
 from langchain_huggingface import HuggingFaceEndpoint
-from src.Prompt import PROMPT_SYSTEM_USER_ASSISTANT,system_promt
+from src.Prompt import PROMPT_SYSTEM_USER_ASSISTANT,createpromt
 from src.utils import *
 from langchain import PromptTemplate, LLMChain
 import sqlite3
@@ -15,15 +15,16 @@ load_dotenv()
 
 
    
-   
+
 
 
 
 class Response_Generation:
-    def __init__(self) -> None:
+    def __init__(self,hf_token):
      
         self._sqlite_DB_Path = os.path.join('artifacts','BEV_database.db')
-        self._hf_token =  os.getenv('HUGGINGFACEHUB_API_TOKEN')
+        self._hf_token = hf_token
+        self._system_promt = createpromt()
 
 
 
@@ -182,18 +183,20 @@ class Response_Generation:
             return input_params
     
     
-    def load_model(self,endpoint_url,max_new_tokens,top_k,top_p,temperature,huggingfacehub_api_token):
+    def load_model(self,max_new_tokens,top_k,top_p,temperature):
 
         llm = HuggingFaceEndpoint(
 
-            endpoint_url= endpoint_url,
+            endpoint_url="https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/",
             # repo_id= repo_id,
             max_new_tokens = max_new_tokens,
             top_k = top_k,
             top_p = top_p,
             temperature = temperature,
-            huggingfacehub_api_token = huggingfacehub_api_token
+            huggingfacehub_api_token = self._hf_token,
+           
         )
+        # print(f"ht_token { self._hf_token}")
 
         return llm
     
@@ -207,13 +210,12 @@ class Response_Generation:
         try:
            
 
-            llm = self.load_model(endpoint_url='https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud',
-                            
+            llm = self.load_model(                            
                             max_new_tokens=4500,
                             top_k=10,
                             top_p=0.25,
                             temperature=0.10,
-                            huggingfacehub_api_token=self._hf_token
+                            
                             )
 
             user_data = self.parse_json(jsondata)
@@ -226,7 +228,7 @@ class Response_Generation:
 
             input_param = self.all_imput_data(userdata=user_data)
 
-            promt= PromptTemplate.from_template(system_promt)
+            promt= PromptTemplate.from_template(self._system_promt )
 
             ll_chain = LLMChain(llm = llm, prompt = promt)
             data  = ll_chain.invoke(input_param)
