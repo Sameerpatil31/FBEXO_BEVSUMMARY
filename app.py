@@ -5,7 +5,7 @@ from flask_cors import CORS
 from functools import wraps
 from dotenv import load_dotenv
 import os
-
+import asyncio
 # Load environment variables from the .env file
 load_dotenv()
 
@@ -19,7 +19,7 @@ load_dotenv()
 obj = Response_Generation(os.getenv('HUGGINGFACEHUB_API_TOKEN'))
 
 app = Flask(__name__)
-CORS(app,allow_headers="*")
+CORS(app)
 app.config['API_KEY'] =   os.getenv('bev-api-key')
 
 @app.route("/")
@@ -31,13 +31,13 @@ def home():
 def require_api_key(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        api_key = request.headers.get('bev-api-key')  # Frontend sends the key in headers
+            api_key = request.headers.get('bev-api-key')  # Frontend sends the key in headers
 
-        if api_key and api_key == app.config['API_KEY']:
-            return f(*args, **kwargs)
-        else:
-            return jsonify({"message": "Invalid or missing API key"}), 401
-    
+            if api_key and api_key == app.config['API_KEY']:
+                return f(*args, **kwargs)
+            else:
+                return jsonify({"message": "Invalid or missing API key"}), 401
+        
     return decorated_function
 
 
@@ -45,7 +45,7 @@ def require_api_key(f):
 
 
 
-@app.route("/bevsummary", methods = ['POST', 'GET'])
+@app.route("/bevsummary", methods = ['POST'])
 @require_api_key
 def predict():
     try:
@@ -54,7 +54,7 @@ def predict():
             data = request.get_json()
             # print(type(data))
             # print(data)
-            txt_result = obj.respone_result(data)
+            txt_result =obj.respone_result(data)
             # print(txt_result)
           
             return jsonify({"result":txt_result})
@@ -71,8 +71,11 @@ def predict():
 @app.route('/businesstype', methods=['GET'])
 @require_api_key
 def get_dropdown_items():
-    items = obj.get_items_from_db()  # Get items from the database
-    return items  # Return the items as a JSON response    
+    try:
+        items = obj.get_items_from_db()  # Get items from the database
+        return items  # Return the items as a JSON response    
+    except Exception as e:
+        raise e
 
 
 
@@ -81,4 +84,4 @@ def get_dropdown_items():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080,debug=True)
+    app.run(host="0.0.0.0", port=8080)
