@@ -186,8 +186,10 @@ class Response_Generation:
     def load_model(self,max_new_tokens,top_k,top_p,temperature):
 
         llm = HuggingFaceEndpoint(
+            #https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/
+            #https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/
 
-            endpoint_url="https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/",
+            endpoint_url="https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/",
             # repo_id= repo_id,
             max_new_tokens = max_new_tokens,
             top_k = top_k,
