@@ -120,7 +120,7 @@ class Response_Generation:
 
             Result_1,Result_2,Result_3,Result_Final = method_1(userdata["current_assets_financial_year"],userdata["total_assets_financial_year"],userdata["current_liabilities_financial_year"],userdata["total_liabilities_financial_year"])
 
-            DCF_result = method_2(userdata["ebitda"],float(Discount_Rate),float(userdata["annual_growth"]),int(len(userdata["ebitda"]))) 
+            DCF_result, project_fcf, turminal_value = method_2(userdata["ebitda"],float(Discount_Rate),float(userdata["annual_growth"]),int(len(userdata["ebitda"])),userdata["current_liabilities_financial_year"]) 
             print(f"DCF Value {DCF_result}")   
 
             Net_Profit_Year,Net_Profit_result = method_3(userdata["revenues"],userdata["expenses"],PE_Ratio)
@@ -149,6 +149,7 @@ class Response_Generation:
             Liquidation_Value_1 = Liquidation_Value[0]
             Liquidation_Value_2 = Liquidation_Value[1]
             Liquidation_Value_3 = Liquidation_Value[2]
+
 
             input_params = {
             "zipCode" : userdata["zipCode"],
@@ -186,7 +187,11 @@ class Response_Generation:
             "PE_Ratio" : PE_Ratio,
             "Industry_Multiplier": Industry_Multiplier,
             "Earnings_Multiplier" :Earnings_Multiplier,
-            "DCF" : DCF_result
+            "DCF" : DCF_result,
+            "pf_1": project_fcf[0],
+            "pf_2": project_fcf[1],
+            "pf_3": project_fcf[2],
+            "Terminal_vale": turminal_value
 
         }
 

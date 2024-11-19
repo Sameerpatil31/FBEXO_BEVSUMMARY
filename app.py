@@ -75,8 +75,8 @@ def predict():
 def get_dropdown_items():
     try:
         items = obj.get_items_from_db()
-        llm = obj.load_model(max_new_tokens=10,top_k=1,top_p=0.5,temperature=0.5)
-        print(llm) # Get items from the database
+        # llm = (obj.load_model(max_new_tokens=10,top_k=1,top_p=0.5,temperature=0.5))
+        # print(llm) # Get items from the database
         return items  # Return the items as a JSON response    
     except Exception as e:
         raise e

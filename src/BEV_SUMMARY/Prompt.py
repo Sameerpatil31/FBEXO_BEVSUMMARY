@@ -242,9 +242,12 @@ Explanetion: He business has a net asset value of $15000, representing its liqui
 
 Method 2. Discounted Cash Flow (DCF)
 
-   - Future Cash Flows: Estimated to sum to $1,350,000 over the next three years, assuming growth and discounting.
-   - Discount Rate: 10% 
-   - Present Value: $844,155
+     years:                             2021                     2022                    2023
+
+     Projected Future:                 40000                     50000                    6000
+
+     Terminal Value : 1200
+   
 
 Explanetion:
 Based on the present value of projected future cash flows, the business is valued at $844,155. This approach offers a forward-looking estimate grounded in the company’s expected profitability and the time value of money.
@@ -359,9 +362,14 @@ Use this input data to display result:
 
 Explanation:  Provide a simple explanation in one line what it means to the given business.
 
-2. Discounted Cash Flow (DCF): Provide a simple explain in one line what it means to the given business.
-Use this Data for explanatio-- Discount Rate : {Discount_Rate} and {DCF}
-DO not display in tabular form.
+2. Discounted Cash Flow (DCF): 
+
+     years:                             {Year_1}                {Year_2}               {Year_3}    
+
+     Projected Future:                 {pf_1}                   {pf_2}                 {pf_3}
+
+     Terminal Value : {Terminal_vale}
+   
 Explanation: Provide a simple explanation in one line what it means to the given business.
 
 3. Comparable Company Analysis (CCA): Try to display for year and results in tabular format as shown in example.
