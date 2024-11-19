@@ -222,7 +222,7 @@ class Response_Generation:
            
 
             llm = self.load_model(                            
-                            max_new_tokens=4500,
+                            max_new_tokens=4300,
                             top_k=10,
                             top_p=0.25,
                             temperature=0.10,
