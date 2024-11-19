@@ -7,7 +7,7 @@ from functools import wraps
 from dotenv import load_dotenv
 import os
 import asyncio
-
+import json
 # Load environment variables from the .env file
 load_dotenv()
 
@@ -54,9 +54,10 @@ def predict():
         if request.method == "POST":
 
             data =request.get_json()
-            print(data)
+            json_string = json.dumps(data, indent=None)
+            print(json_string)
             
-            txt_result = asyncio.run(obj.respone_result(data))
+            txt_result = obj.respone_result(json_string)
             # print(txt_result)
             app.logger.info(f"Response result: {txt_result} (type: {type(txt_result)})")
           

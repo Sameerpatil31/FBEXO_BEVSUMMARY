@@ -61,8 +61,8 @@ class Response_Generation:
 
             # print(f"This is from json parse function{jdata}")
 
-            # jdata = json.loads(f"""{jdata}""")
-            # print(type(jdata))
+            jdata = json.loads(f"""{jdata}""")
+            print(type(jdata))
             zipCode = jdata['zipCode']
             businessType = jdata['businessType']
             currency = jdata['currency']
@@ -97,7 +97,7 @@ class Response_Generation:
                               "annual_growth":annual_growth,
                               "ebitda":ebitda}
             # data = [item[0] if isinstance(item, tuple) else item for item in User_Data_list]
-            # print(type(User_Data_list))
+            print(f"parse json data {User_Data_list}")
             # print(f"This is return of json parse data {dict(User_Data_list)}")
 
             return User_Data_list
@@ -117,9 +117,11 @@ class Response_Generation:
             PE_Ratio =float(df_dat[2].replace("%",""))
             Industry_Multiplier = float(df_dat[3].replace("%",""))
             Earnings_Multiplier = float(df_dat[4].replace("%",""))
+
             Result_1,Result_2,Result_3,Result_Final = method_1(userdata["current_assets_financial_year"],userdata["total_assets_financial_year"],userdata["current_liabilities_financial_year"],userdata["total_liabilities_financial_year"])
 
-            DCF_result = method_2(userdata["ebitda"],Discount_Rate,userdata["annual_growth"],len(userdata["ebitda"]))    
+            DCF_result = method_2(userdata["ebitda"],float(Discount_Rate),float(userdata["annual_growth"]),int(len(userdata["ebitda"]))) 
+            print(f"DCF Value {DCF_result}")   
 
             Net_Profit_Year,Net_Profit_result = method_3(userdata["revenues"],userdata["expenses"],PE_Ratio)
             # print(f"Method 3 :{Net_Profit_Year,Net_Profit_result}")
@@ -184,7 +186,7 @@ class Response_Generation:
             "PE_Ratio" : PE_Ratio,
             "Industry_Multiplier": Industry_Multiplier,
             "Earnings_Multiplier" :Earnings_Multiplier,
-            "DCF":DCF_result
+            "DCF" : DCF_result
 
         }
 
@@ -222,7 +224,7 @@ class Response_Generation:
            
 
             llm = self.load_model(                            
-                            max_new_tokens=4300,
+                            max_new_tokens=4000,
                             top_k=10,
                             top_p=0.25,
                             temperature=0.10,
@@ -238,6 +240,8 @@ class Response_Generation:
             # ratio_data_list = self.ratio_data(bussnesstype[0])
 
             input_param = self.all_imput_data(userdata=user_data)
+
+            print(f"Inpput parameter {input_param}")
 
             promt= PromptTemplate.from_template(self._system_promt )
 
