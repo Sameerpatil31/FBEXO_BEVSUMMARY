@@ -359,8 +359,8 @@ Use this input data to display result:
 
 Explanetion:  Provide a simple explanation in one line what it means to the given business.
 
-2. Discounted Cash Flow (DCF): Provide a simple calculation and explain in one line what it means to the given business.
-Use this Input Data for calculation-- Discount Rate : {Discount_Rate}
+2. Discounted Cash Flow (DCF): Provide a simple explain in one line what it means to the given business for Discounted Cash Flow.
+Use this Input Data for calculation-- Discount Rate : {Discount_Rate} and {DCF}
 DO not display in tabular form.
 Explanetion: Provide a simple explanation in one line what it means to the given business.
 

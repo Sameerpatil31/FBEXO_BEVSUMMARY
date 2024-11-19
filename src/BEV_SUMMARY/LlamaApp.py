@@ -71,6 +71,8 @@ class Response_Generation:
             financial_year_3 = jdata['financialMetrics']['years'][2]
             revenues=jdata['financialMetrics']['revenue']
             expenses=jdata['financialMetrics']['expenses']
+            annual_growth = jdata["financialMetrics"]["annual_growth"]
+            ebitda = jdata["financialMetrics"]["ebitda"]
         
             current_assets_financial_year=jdata['financialMetrics']['assets']['current']
         
@@ -91,7 +93,9 @@ class Response_Generation:
                               "current_assets_financial_year":current_assets_financial_year,
                               "total_assets_financial_year":total_assets_financial_year,
                               "current_liabilities_financial_year":current_liabilities_financial_year,
-                              "total_liabilities_financial_year":total_liabilities_financial_year}
+                              "total_liabilities_financial_year":total_liabilities_financial_year,
+                              "annual_growth":annual_growth,
+                              "ebitda":ebitda}
             # data = [item[0] if isinstance(item, tuple) else item for item in User_Data_list]
             # print(type(User_Data_list))
             # print(f"This is return of json parse data {dict(User_Data_list)}")
@@ -115,7 +119,7 @@ class Response_Generation:
             Earnings_Multiplier = float(df_dat[4].replace("%",""))
             Result_1,Result_2,Result_3,Result_Final = method_1(userdata["current_assets_financial_year"],userdata["total_assets_financial_year"],userdata["current_liabilities_financial_year"],userdata["total_liabilities_financial_year"])
 
-            # dcf_result = method_2(,Discount_Rate,)    
+            DCF_result = method_2(userdata["ebitda"],Discount_Rate,userdata["annual_growth"],len(userdata["ebitda"]))    
 
             Net_Profit_Year,Net_Profit_result = method_3(userdata["revenues"],userdata["expenses"],PE_Ratio)
             # print(f"Method 3 :{Net_Profit_Year,Net_Profit_result}")
@@ -179,7 +183,8 @@ class Response_Generation:
             "Discount_Rate": Discount_Rate,
             "PE_Ratio" : PE_Ratio,
             "Industry_Multiplier": Industry_Multiplier,
-            "Earnings_Multiplier" :Earnings_Multiplier
+            "Earnings_Multiplier" :Earnings_Multiplier,
+            "DCF":DCF_result
 
         }
 
