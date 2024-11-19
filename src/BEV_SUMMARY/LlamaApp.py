@@ -1,7 +1,7 @@
 
 from langchain_huggingface import HuggingFaceEndpoint
-from src.Prompt import PROMPT_SYSTEM_USER_ASSISTANT,createpromt
-from src.utils import *
+from src.BEV_SUMMARY.Prompt import PROMPT_SYSTEM_USER_ASSISTANT,createpromt
+from src.BEV_SUMMARY.utils import *
 from langchain import PromptTemplate, LLMChain
 import sqlite3
 import pandas as pd
@@ -114,6 +114,9 @@ class Response_Generation:
             Industry_Multiplier = float(df_dat[3].replace("%",""))
             Earnings_Multiplier = float(df_dat[4].replace("%",""))
             Result_1,Result_2,Result_3,Result_Final = method_1(userdata["current_assets_financial_year"],userdata["total_assets_financial_year"],userdata["current_liabilities_financial_year"],userdata["total_liabilities_financial_year"])
+
+            # dcf_result = method_2(,Discount_Rate,)    
+
             Net_Profit_Year,Net_Profit_result = method_3(userdata["revenues"],userdata["expenses"],PE_Ratio)
             # print(f"Method 3 :{Net_Profit_Year,Net_Profit_result}")
             Net_Profit_Year_1 =Net_Profit_Year[0]

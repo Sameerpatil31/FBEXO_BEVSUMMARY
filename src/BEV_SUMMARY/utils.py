@@ -15,6 +15,15 @@ def method_1(C_A_F_Y,T_A_F_Y,C_L_Y_Y,T_L_F_Y):
 
     return result_1,result_2,result_3,final_result 
 
+
+
+def method_2(fcf, discount_rate, growth_rate, terminal_year):
+    discounted_fcf = [fcf[t] / ((1 + discount_rate) ** (t + 1)) for t in range(len(fcf))]
+    terminal_value = (fcf[-1] * (1 + growth_rate)) / (discount_rate - growth_rate)
+    discounted_terminal_value = terminal_value / ((1 + discount_rate) ** terminal_year)
+    total_value = sum(discounted_fcf) + discounted_terminal_value
+    return total_value
+
 def method_3(revenue,expense,PE_Ratio):
     net_profits = [revenue - expense for revenue, expense in zip(revenue, expense)]
     result_net = [i*PE_Ratio for i in net_profits]

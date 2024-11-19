@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
+# from quart import Quart, jsonify, request
 import sqlite3
-from src.LlamaApp import Response_Generation
+from src.BEV_SUMMARY.LlamaApp import Response_Generation
 from flask_cors import CORS
 from functools import wraps
 from dotenv import load_dotenv
 import os
 import asyncio
+
 # Load environment variables from the .env file
 load_dotenv()
 
@@ -51,11 +53,12 @@ def predict():
     try:
         if request.method == "POST":
 
-            data = request.get_json()
-            # print(type(data))
-            # print(data)
-            txt_result =obj.respone_result(data)
+            data =request.get_json()
+            print(data)
+            
+            txt_result = asyncio.run(obj.respone_result(data))
             # print(txt_result)
+            app.logger.info(f"Response result: {txt_result} (type: {type(txt_result)})")
           
             return jsonify({"result":txt_result})
     except Exception as e:
@@ -65,14 +68,14 @@ def predict():
     
 
 
-
-
 # API endpoint to return items for dropdown
 @app.route('/businesstype', methods=['GET'])
 @require_api_key
 def get_dropdown_items():
     try:
-        items = obj.get_items_from_db()  # Get items from the database
+        items = obj.get_items_from_db()
+        llm = obj.load_model(max_new_tokens=10,top_k=1,top_p=0.5,temperature=0.5)
+        print(llm) # Get items from the database
         return items  # Return the items as a JSON response    
     except Exception as e:
         raise e
@@ -84,4 +87,4 @@ def get_dropdown_items():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080,debug=True)
