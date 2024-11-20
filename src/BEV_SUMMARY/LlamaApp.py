@@ -1,5 +1,6 @@
 
 from langchain_huggingface import HuggingFaceEndpoint
+# from langchain_community.llms import HuggingFaceEndpoint,huggingface_endpoint
 from src.BEV_SUMMARY.Prompt import PROMPT_SYSTEM_USER_ASSISTANT,createpromt
 from src.BEV_SUMMARY.utils import *
 from langchain import PromptTemplate, LLMChain
