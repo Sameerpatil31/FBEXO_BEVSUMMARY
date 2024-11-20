@@ -247,6 +247,8 @@ Method 2. Discounted Cash Flow (DCF)
      Projected Future:                 40000                     50000                    6000
 
      Terminal Value : 1200
+
+     Total Valuation : 15000
    
 
 Explanetion:
@@ -369,6 +371,8 @@ Explanation:  Provide a simple explanation in one line what it means to the give
      Projected Future:                 {pf_1}                   {pf_2}                 {pf_3}
 
      Terminal Value : {Terminal_vale}
+     Total Valuation : {DCF}
+     
    
 Explanation: Provide a simple explanation in one line what it means to the given business.
 
