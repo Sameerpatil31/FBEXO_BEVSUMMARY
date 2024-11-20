@@ -21,3 +21,6 @@ loglevel = 'info'
 
 # Graceful timeout for long-running requests
 timeout = 120
+worker_class = 'gevent'  # Use async worker class for long requests
+graceful_timeout = 300
+keepalive = 5  # Keep connections alive for reuse
