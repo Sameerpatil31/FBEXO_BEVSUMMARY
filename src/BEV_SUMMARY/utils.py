@@ -55,7 +55,7 @@ def method_5(revenue,expense,Earnings_Multiplier):
     net_profits = [revenue - expense for revenue, expense in zip(revenue, expense)]
     result_net = [i*Earnings_Multiplier for i in net_profits]
 
-    return result_net
+    return net_profits,result_net
     
 
 def method_6(current_asset,current_liabilites):

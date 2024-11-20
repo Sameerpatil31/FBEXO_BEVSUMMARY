@@ -232,7 +232,7 @@ BEV for the Retail-CPG <Business Type> business is as follows:
 
 Method 1. Asset-Based Valuation :
 
-                 2021                2022           2023           Final
+                 2023                2022           2021           Final
 
                1100000             1000000         100000         15000
 
@@ -242,7 +242,7 @@ Explanetion: He business has a net asset value of $15000, representing its liqui
 
 Method 2. Discounted Cash Flow (DCF)
 
-     years:                             2021                     2022                    2023
+     Year:                             2023                     2022                    2021
 
      Projected Future:                 40000                     50000                    6000
 
@@ -259,11 +259,13 @@ Method 3. Comparable Company Analysis (CCA)
 
    
    
-      2021                2022           2023          
+    Year:                2023                2022           2021          
   
-    1100000             1000000         100000        
+    Net Profit:         1100000             1000000         100000        
   
-    200000              1000000         200000
+    Valuation:          200000              1000000         200000
+
+    PE Ratio:          10 
 
 
 Explanetion:
@@ -273,11 +275,15 @@ The CCA valuation is $5,000,000, reflecting the business's worth based on the av
 Method 4. Rule of Thumb Methods
    
 
-     2021                2022           2023          
+     
+    Year:                2023                2022           2021          
   
-    1100000             1000000         100000        
+           
   
-    200000              1000000         20000
+    Valuation:          200000              1000000         200000
+
+    Industry Multiplier:  10 
+
 
    
 
@@ -289,11 +295,15 @@ Method 5. Earnings Multiplier Method
   
 
    
-     2021                2022           2023          
+     
+    Year:                2023                2022           2021          
   
-    1100000             1000000         100000        
+    Net Profit:         1100000             1000000         100000        
   
-    200000              1000000         20000
+    Valuation:          200000              1000000         200000
+
+    Earnings Multiplier: 10 
+
 
 
   
@@ -377,48 +387,44 @@ Explanation:  Provide a simple explanation in one line what it means to the give
 Explanation: Provide a simple explanation in one line what it means to the given business.
 
 3. Comparable Company Analysis (CCA): Try to display for year and results in tabular format as shown in example.
- 
-Use this input data to display result in tabular form:
-Make it should be in only One table.
-PE_Ratio : {PE_Ratio}
 
-       {Year_1}                         {Year_2}                         {Year_3}                          
+Make it should be in only One table.
+
+
+     Year:          {Year_1}                         {Year_2}                         {Year_3}                          
     
-    {Net_Profit_Year_1}              {Net_Profit_Year_2}              {Net_Profit_Year_3}                 
+    Net Proft: {Net_Profit_Year_1}              {Net_Profit_Year_2}              {Net_Profit_Year_3}                 
     
-    {Net_Profit_result_1}            {Net_Profit_result_2}            {Net_Profit_result_3}
+    Valuation:  {Net_Profit_result_1}            {Net_Profit_result_2}            {Net_Profit_result_3}
+
+    PE Ratio  {PE_Ratio}
  
 Explanation: Provide a simple explanation in one line what it means to the given business.
 
 4. Rule of Thumb Methods:  This uses industry-specific revenue multipliers to estimate value.
-Try to display for year and results in tabular format as shown in example.
-Use this input data to display result in tabular form:
 Make it should be in only One table.
-Industry_Multiplier: {Industry_Multiplier}
 
 
-     {Year_1}                           {Year_2}                        {Year_3} 
+
+    Year :           {Year_1}                           {Year_2}                        {Year_3} 
    
-     {Gross_revenu_Year_1}        {Gross_revenu_Year_2}         {Gross_revenu_Year_3}
+    Valuation:  {Gross_revenu_result_1}        {Gross_revenu_result_2}         {Gross_revenu_result_3}
    
-     {Gross_revenu_result_1}      {Gross_revenu_result_2}       {Gross_revenu_result_3}
+    Industry Multiplier: {Industry_Multiplier}
 
 Explanation: Provide a simple explanation in one line what it means to the given business.
 
 5. Earnings Multiplier:  Provide a simple calculation and explain in one line what it means to the given business.
-Try to display for year and results in tabular format as shown in example.
-Use this input data to display result in tabular form:
 Make it should be in only One table.
-Earnings Multiplier: {Earnings_Multiplier}
-
-
 
    
-     {Year_1}                       {Year_2}               {Year_3} 
+   Year:              {Year_1}                       {Year_2}               {Year_3} 
    
-     {Net_Profit_Year_1}      {Net_Profit_Year_2}    {Net_Profit_Year_3}
+   Net Profit:    {Net_earning_result_1}      {Net_earning_result_2}    {Net_earning_result_3}
     
-    {Net_earning_result_1}   {Net_earning_result_2}  {Net_earning_result_3}
+   Valuation:    {net_valuation_1}   {net_valuation_2}  {net_valuation_3}
+
+   Earnings Multipliers: {Earnings_Multiplier}
 
 
 Explanation: Provide a simple explanation in one line what it means to the given business.

@@ -139,11 +139,14 @@ class Response_Generation:
             Gross_revenu_result_1 = Gross_revenu_result[0]
             Gross_revenu_result_2 = Gross_revenu_result[1]
             Gross_revenu_result_3 = Gross_revenu_result[2]
-            Net_earning_result= method_5(userdata["revenues"],userdata["expenses"],Earnings_Multiplier)
+            Net_earning_result,net_valuation= method_5(userdata["revenues"],userdata["expenses"],Earnings_Multiplier)
             # print(f"Method 5 :{Net_earning_result}")
             Net_earning_result_1 = Net_earning_result[0]
             Net_earning_result_2 = Net_earning_result[1] 
             Net_earning_result_3 = Net_earning_result[2]  
+            net_valuation_1 = net_valuation[0]
+            net_valuation_2 = net_valuation[1] 
+            net_valuation_3 = net_valuation[2] 
             Liquidation_Value  = method_6(userdata["current_assets_financial_year"],userdata["current_liabilities_financial_year"])
             # print(f"Method 6 :{Liquidation_Value}")
             Liquidation_Value_1 = Liquidation_Value[0]
@@ -180,6 +183,9 @@ class Response_Generation:
             "Net_earning_result_1" : Net_earning_result_1,
             "Net_earning_result_2" : Net_earning_result_2,
             "Net_earning_result_3" : Net_earning_result_3,
+            "net_valuation_1": net_valuation_1,
+            "net_valuation_2": net_valuation_2,
+            "net_valuation_3": net_valuation_3,
             "Liquidation_Value_1" : Liquidation_Value_1,
             "Liquidation_Value_2" : Liquidation_Value_2,
             "Liquidation_Value_3" : Liquidation_Value_3,
@@ -191,7 +197,8 @@ class Response_Generation:
             "pf_1": project_fcf[0],
             "pf_2": project_fcf[1],
             "pf_3": project_fcf[2],
-            "Terminal_vale": turminal_value
+            "Terminal_vale": turminal_value,
+           
 
         }
 
