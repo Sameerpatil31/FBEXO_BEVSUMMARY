@@ -397,7 +397,7 @@ Make it should be in only One table.
     
     Valuation:  {Net_Profit_result_1}            {Net_Profit_result_2}            {Net_Profit_result_3}
 
-    PE Ratio  {PE_Ratio}
+    PE Ratio  {PE_Ratio} 
  
 Explanation: Provide a simple explanation in one line what it means to the given business.
 

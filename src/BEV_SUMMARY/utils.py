@@ -27,7 +27,7 @@ def method_2(fcf: list, discount_rate: float, growth_rate: float, terminal_year:
     projected_fcf = [((fcf_value*0.7) - (current_l))*discount_rate for fcf_value,current_l in zip(fcf,current_liabilities)]
     
     # Calculate terminal value with correct float handling
-    terminal_value = (fcf[0] * (1 + growth_rate)) / (discount_rate - growth_rate)
+    terminal_value = (fcf[0] * (1 + growth_rate)) / abs((discount_rate - growth_rate))
     
     # Calculate discounted terminal value
     discounted_terminal_value = terminal_value / ((1 + discount_rate) ** terminal_year)
