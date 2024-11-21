@@ -35,7 +35,7 @@ def method_2(fcf: list, discount_rate: float, growth_rate: float, terminal_year:
     # Calculate total value
     total_value = sum(projected_fcf) + discounted_terminal_value
     
-    return round(total_value,2), projected_fcf, terminal_value
+    return round(total_value,2), projected_fcf, discounted_terminal_value
 
 def method_3(revenue,expense,PE_Ratio):
     net_profits = [revenue - expense for revenue, expense in zip(revenue, expense)]

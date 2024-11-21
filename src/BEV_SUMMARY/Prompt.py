@@ -244,7 +244,7 @@ Method 2. Discounted Cash Flow (DCF)
 
      Year:                             2023                     2022                    2021
 
-     Projected Future:                 40000                     50000                    6000
+     Cash flows:                 40000                     50000                    6000
 
      Terminal Value : 1200
 
@@ -378,7 +378,7 @@ Explanation:  Provide a simple explanation in one line what it means to the give
 
      years:                             {Year_1}                {Year_2}               {Year_3}    
 
-     Projected Future:                 {pf_1}                   {pf_2}                 {pf_3}
+     Cash flows:                 {pf_1}                   {pf_2}                 {pf_3}
 
      Terminal Value : {Terminal_vale}
      Total Valuation : {DCF}
