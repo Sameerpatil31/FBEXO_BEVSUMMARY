@@ -234,9 +234,9 @@ Method 1. Asset-Based Valuation :
 
        year                      2023                2022           2021         
 
-       Net Asset Value:         1100000             1000000         100000         
+       Net Asset Value:         1100000             10000000         100000         
 
-       Valuation:               1100000
+       Valuation: 1100000
 
 
 Explanetion: He business has a net asset value of $15000, representing its liquidation value if all assets were sold and liabilities settled. This method primarily reflects the tangible asset base of the business.
@@ -246,7 +246,7 @@ Method 2. Discounted Cash Flow (DCF)
 
      Year:                             2023                     2022                    2021
 
-     Cash flows:                 40000                     50000                    6000
+     Cash flows:                       40000                     50000                    6000
 
      Terminal Value : 1200
 
@@ -261,11 +261,11 @@ Method 3. Comparable Company Analysis (CCA)
 
    
    
-    Year:                2023                2022           2021          
+    Year:                             2023                2022           2021          
   
-    Net Profit:         1100000             1000000         100000        
+    Net Profit:                       1100000             1000000         100000        
   
-    Valuation:          200000              1000000         200000
+    Valuation:                        200000              1000000         200000
 
     PE Ratio(businessType): 10 
 
@@ -278,19 +278,16 @@ Method 4. Rule of Thumb Methods
    
 
      
-    Year:                2023                2022           2021          
+    Year:                                 2023                2022           2021          
   
            
   
-    Valuation:          200000              1000000         200000
+    Valuation:                            200000              1000000         200000
 
-    Industry Multiplier(businessType):  10 
+    Industry Multiplier(businessType): 10 
 
 
-   
-
-Explanetion:
-This method provides a valuation of $3,600,000 by applying an industry-specific multiplier to gross revenue. It is a quick estimate often used for benchmarking purposes in specific sectors.
+Explanetion: This method provides a valuation of $3,600,000 by applying an industry-specific multiplier to gross revenue. It is a quick estimate often used for benchmarking purposes in specific sectors.
 
 
 Method 5. Earnings Multiplier Method
@@ -306,12 +303,7 @@ Method 5. Earnings Multiplier Method
 
     Earnings Multiplier(businessType): 10 
 
-
-
-  
-
-Explanetion:
-The earnings multiplier method yields a valuation of $2,500,000, reflecting the business's profitability and earnings potential.   
+Explanetion: The earnings multiplier method yields a valuation of $2,500,000, reflecting the business's profitability and earnings potential.   
 
    
    
@@ -319,12 +311,11 @@ Method 6. Monte Carlo Simulation Results
    - Mid-Range Valuation: $1,444,155
    - High-Range Valuation: $1,844,155
 
-Explanetion: 
-The Monte Carlo simulation suggests that the business’s valuation could range between $1,444,155 and $1,844,155. This probabilistic model captures a spectrum of potential outcomes, factoring in uncertainties around future financial performance.  
+Explanetion: The Monte Carlo simulation suggests that the business’s valuation could range between $1,444,155 and $1,844,155. This probabilistic model captures a spectrum of potential outcomes, factoring in uncertainties around future financial performance.  
 
    
 
-   Valuation Summary
+Valuation Summary
 The business's valuation varies significantly based on the methodology applied:
 
 - Rule of Thumb Method: $3,600,000
@@ -360,7 +351,7 @@ Use this input data to display result:
 
   Net Asset Value:       {Result_1}      {Result_2}         {Result_3}  
 
-  Valuation:             {Result_1}
+  Valuation:{Result_1}
 
 
 Explanation:  Provide a simple explanation in one line what it means to the given business.
@@ -369,7 +360,7 @@ Explanation:  Provide a simple explanation in one line what it means to the give
 
      years:                             {Year_1}                {Year_2}               {Year_3}    
 
-     Cash flows:                 {pf_1}                   {pf_2}                 {pf_3}
+     Cash flows:                         {pf_1}                   {pf_2}                 {pf_3}
 
      Terminal Value : {Terminal_vale}
      Total Valuation : {DCF}
@@ -382,13 +373,13 @@ Explanation: Provide a simple explanation in one line what it means to the given
 Make it should be in only One table.
 
 
-     Year:          {Year_1}                         {Year_2}                         {Year_3}                          
+     Year:                       {Year_1}                         {Year_2}                         {Year_3}                          
     
-    Net Proft: {Net_Profit_Year_1}              {Net_Profit_Year_2}              {Net_Profit_Year_3}                 
+    Net Proft:               {Net_Profit_Year_1}              {Net_Profit_Year_2}              {Net_Profit_Year_3}                 
     
-    Valuation:  {Net_Profit_result_1}            {Net_Profit_result_2}            {Net_Profit_result_3}
+    Valuation:               {Net_Profit_result_1}            {Net_Profit_result_2}            {Net_Profit_result_3}
 
-    PE Ratio({businessType}):  {PE_Ratio} 
+    PE Ratio({businessType}): {PE_Ratio} 
  
 Explanation: Provide a simple explanation in one line what it means to the given business.
 
@@ -397,9 +388,9 @@ Make it should be in only One table.
 
 
 
-    Year :           {Year_1}                           {Year_2}                        {Year_3} 
+    Year :                                   {Year_1}                           {Year_2}                        {Year_3} 
    
-    Valuation:  {Gross_revenu_result_1}        {Gross_revenu_result_2}         {Gross_revenu_result_3}
+    Valuation:                           {Gross_revenu_result_1}        {Gross_revenu_result_2}         {Gross_revenu_result_3}
    
     Industry Multiplier({businessType}): {Industry_Multiplier}
 
@@ -409,11 +400,11 @@ Explanation: Provide a simple explanation in one line what it means to the given
 Make it should be in only One table.
 
    
-   Year:              {Year_1}                       {Year_2}               {Year_3} 
+   Year:                                {Year_1}                       {Year_2}               {Year_3} 
    
-   Net Profit:    {Net_earning_result_1}      {Net_earning_result_2}    {Net_earning_result_3}
+   Net Profit:                         {Net_earning_result_1}      {Net_earning_result_2}    {Net_earning_result_3}
     
-   Valuation:    {net_valuation_1}   {net_valuation_2}  {net_valuation_3}
+   Valuation:                           {net_valuation_1}   {net_valuation_2}  {net_valuation_3}
 
    Earnings Multipliers({businessType}): {Earnings_Multiplier}
 
