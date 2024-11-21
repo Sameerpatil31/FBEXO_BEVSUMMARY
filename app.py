@@ -56,7 +56,7 @@ def predict():
 
             data =request.get_json()
             json_string = json.dumps(data, indent=None)
-            print(json_string)
+            # print(json_string)
             
             txt_result = obj.respone_result(json_string)
             # print(txt_result)

@@ -22,7 +22,7 @@ def method_2(fcf: list, discount_rate: float, growth_rate: float, terminal_year:
     growth_rate = float(growth_rate)
     
     # Calculate discounted FCFs
-    discounted_fcf = [fcf[t] / ((1 + discount_rate) ** (t + 1)) for t in range(len(fcf))]
+    # discounted_fcf = [fcf[t] / ((1 + discount_rate) ** (t + 1)) for t in range(len(fcf))]
 
     projected_fcf = [((fcf_value*0.7) - (current_l))*discount_rate for fcf_value,current_l in zip(fcf,current_liabilities)]
     
@@ -33,7 +33,7 @@ def method_2(fcf: list, discount_rate: float, growth_rate: float, terminal_year:
     discounted_terminal_value = terminal_value / ((1 + discount_rate) ** terminal_year)
     
     # Calculate total value
-    total_value = sum(discounted_fcf) + discounted_terminal_value
+    total_value = sum(projected_fcf) + discounted_terminal_value
     
     return round(total_value,2), projected_fcf, terminal_value
 
