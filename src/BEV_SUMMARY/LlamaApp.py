@@ -148,7 +148,7 @@ class Response_Generation:
             net_valuation_1 = net_valuation[0]
             net_valuation_2 = net_valuation[1] 
             net_valuation_3 = net_valuation[2] 
-            Liquidation_Value  = method_6(userdata["current_assets_financial_year"],userdata["current_liabilities_financial_year"])
+            Liquidation_Value  = method_6(userdata["total_assets_financial_year"],userdata["total_liabilities_financial_year"])
             # print(f"Method 6 :{Liquidation_Value}")
             Liquidation_Value_1 = Liquidation_Value[0]
             Liquidation_Value_2 = Liquidation_Value[1]

@@ -265,7 +265,7 @@ Method 3. Comparable Company Analysis (CCA)
   
     Valuation:          200000              1000000         200000
 
-    PE Ratio:          10 
+    PE Ratio(businessType): 10 
 
 
 Explanetion:
@@ -282,7 +282,7 @@ Method 4. Rule of Thumb Methods
   
     Valuation:          200000              1000000         200000
 
-    Industry Multiplier:  10 
+    Industry Multiplier(businessType):  10 
 
 
    
@@ -302,7 +302,7 @@ Method 5. Earnings Multiplier Method
   
     Valuation:          200000              1000000         200000
 
-    Earnings Multiplier: 10 
+    Earnings Multiplier(businessType): 10 
 
 
 
@@ -397,7 +397,7 @@ Make it should be in only One table.
     
     Valuation:  {Net_Profit_result_1}            {Net_Profit_result_2}            {Net_Profit_result_3}
 
-    PE Ratio  {PE_Ratio} 
+    PE Ratio({businessType}):  {PE_Ratio} 
  
 Explanation: Provide a simple explanation in one line what it means to the given business.
 
@@ -410,7 +410,7 @@ Make it should be in only One table.
    
     Valuation:  {Gross_revenu_result_1}        {Gross_revenu_result_2}         {Gross_revenu_result_3}
    
-    Industry Multiplier: {Industry_Multiplier}
+    Industry Multiplier({businessType}): {Industry_Multiplier}
 
 Explanation: Provide a simple explanation in one line what it means to the given business.
 
@@ -424,7 +424,7 @@ Make it should be in only One table.
     
    Valuation:    {net_valuation_1}   {net_valuation_2}  {net_valuation_3}
 
-   Earnings Multipliers: {Earnings_Multiplier}
+   Earnings Multipliers({businessType}): {Earnings_Multiplier}
 
 
 Explanation: Provide a simple explanation in one line what it means to the given business.
