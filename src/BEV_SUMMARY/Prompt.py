@@ -351,9 +351,9 @@ Use this input data to display result:
 
   Net Asset Value:       {Result_1}      {Result_2}         {Result_3}  
 
-  Valuation:{Result_1} 
+  Valuation:             {Result_1} 
 
- Make sure Valuation display should be for latest year only. Do not display for all years.
+ 
 
 
 Explanation:  Provide a simple explanation in one line what it means to the given business.

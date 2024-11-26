@@ -9,7 +9,7 @@ import pandas as pd
 import json
 from dotenv import load_dotenv
 import os
-
+from src.login import logger
 # Load environment variables from the .env file
 load_dotenv()
 
@@ -33,18 +33,22 @@ class Response_Generation:
 
 
     def get_items_from_db(self):
-        conn = sqlite3.connect(self._sqlite_DB_Path)
-        c = conn.cursor()
-        
-        # Fetch all items
-        c.execute('SELECT Industry_Name FROM BEV')
-        items = c.fetchall()
-        
-        conn.close()
-        
-        # Convert data to a list of dictionaries
-        return [item[0] for item in items]    
 
+        try:
+            conn = sqlite3.connect(self._sqlite_DB_Path)
+            c = conn.cursor()
+            
+            # Fetch all items
+            c.execute('SELECT Industry_Name FROM BEV')
+            items = c.fetchall()
+            
+            conn.close()
+            logger.info("Business type list fetched:")
+            
+            # Convert data to a list of dictionaries
+            return [item[0] for item in items]    
+        except Exception as e:
+            logger.error(f"Error in get_items_from_db function and error is {e}")
 
 
 
@@ -100,11 +104,13 @@ class Response_Generation:
             # data = [item[0] if isinstance(item, tuple) else item for item in User_Data_list]
             print(f"parse json data {User_Data_list}")
             # print(f"This is return of json parse data {dict(User_Data_list)}")
+            logger.info("Parsed json data")
 
             return User_Data_list
         
         except Exception as e:
             print(f"error: {e}")
+            logger.error(f"Error in parse_json function and error is {e}")
             raise e
         
 
@@ -113,118 +119,128 @@ class Response_Generation:
 
     def all_imput_data(self,userdata)->dict:
             # print(userdata)
-            df_dat = get_data_sql(userdata["businessType"])
-            Discount_Rate =float(df_dat[1].replace("%",""))
-            PE_Ratio =float(df_dat[2].replace("%",""))
-            Industry_Multiplier = float(df_dat[3].replace("%",""))
-            Earnings_Multiplier = float(df_dat[4].replace("%",""))
+            try:
+                df_dat = get_data_sql(userdata["businessType"])
+                Discount_Rate =float(df_dat[1].replace("%",""))
+                PE_Ratio =float(df_dat[2].replace("%",""))
+                Industry_Multiplier = float(df_dat[3].replace("%",""))
+                Earnings_Multiplier = float(df_dat[4].replace("%",""))
 
-            Result_1,Result_2,Result_3,Result_Final = method_1(userdata["current_assets_financial_year"],userdata["total_assets_financial_year"],userdata["current_liabilities_financial_year"],userdata["total_liabilities_financial_year"])
+                Result_1,Result_2,Result_3,Result_Final = method_1(userdata["current_assets_financial_year"],userdata["total_assets_financial_year"],userdata["current_liabilities_financial_year"],userdata["total_liabilities_financial_year"])
 
-            DCF_result, project_fcf, turminal_value = method_2(userdata["ebitda"],float(Discount_Rate),float(userdata["annual_growth"]),int(len(userdata["ebitda"])),userdata["current_liabilities_financial_year"]) 
-            print(f"DCF Value {DCF_result}")   
+                DCF_result, project_fcf, turminal_value = method_2(userdata["ebitda"],float(Discount_Rate),float(userdata["annual_growth"]),int(len(userdata["ebitda"])),userdata["current_liabilities_financial_year"]) 
+                print(f"DCF Value {DCF_result}")   
 
-            Net_Profit_Year,Net_Profit_result = method_3(userdata["revenues"],userdata["expenses"],PE_Ratio)
-            # print(f"Method 3 :{Net_Profit_Year,Net_Profit_result}")
-            Net_Profit_Year_1 =Net_Profit_Year[0]
-            Net_Profit_Year_2 =Net_Profit_Year[1]
-            Net_Profit_Year_3 =Net_Profit_Year[2]
-            Net_Profit_result_1 = Net_Profit_result[0]
-            Net_Profit_result_2 = Net_Profit_result[1]
-            Net_Profit_result_3 = Net_Profit_result[2]
-            Gross_revenu_result =method_4(userdata["revenues"],Industry_Multiplier)
-            # print(f"Method 4 :{Gross_revenu_result}")
-            Gross_revenu_Year_1 = userdata["revenues"][0]
-            Gross_revenu_Year_2 = userdata["revenues"][1]
-            Gross_revenu_Year_3 = userdata["revenues"][2]
-            Gross_revenu_result_1 = Gross_revenu_result[0]
-            Gross_revenu_result_2 = Gross_revenu_result[1]
-            Gross_revenu_result_3 = Gross_revenu_result[2]
-            Net_earning_result,net_valuation= method_5(userdata["revenues"],userdata["expenses"],Earnings_Multiplier)
-            # print(f"Method 5 :{Net_earning_result}")
-            Net_earning_result_1 = Net_earning_result[0]
-            Net_earning_result_2 = Net_earning_result[1] 
-            Net_earning_result_3 = Net_earning_result[2]  
-            net_valuation_1 = net_valuation[0]
-            net_valuation_2 = net_valuation[1] 
-            net_valuation_3 = net_valuation[2] 
-            Liquidation_Value  = method_6(userdata["total_assets_financial_year"],userdata["total_liabilities_financial_year"])
-            # print(f"Method 6 :{Liquidation_Value}")
-            Liquidation_Value_1 = Liquidation_Value[0]
-            Liquidation_Value_2 = Liquidation_Value[1]
-            Liquidation_Value_3 = Liquidation_Value[2]
+                Net_Profit_Year,Net_Profit_result = method_3(userdata["revenues"],userdata["expenses"],PE_Ratio)
+                # print(f"Method 3 :{Net_Profit_Year,Net_Profit_result}")
+                Net_Profit_Year_1 =Net_Profit_Year[0]
+                Net_Profit_Year_2 =Net_Profit_Year[1]
+                Net_Profit_Year_3 =Net_Profit_Year[2]
+                Net_Profit_result_1 = Net_Profit_result[0]
+                Net_Profit_result_2 = Net_Profit_result[1]
+                Net_Profit_result_3 = Net_Profit_result[2]
+                Gross_revenu_result =method_4(userdata["revenues"],Industry_Multiplier)
+                # print(f"Method 4 :{Gross_revenu_result}")
+                Gross_revenu_Year_1 = userdata["revenues"][0]
+                Gross_revenu_Year_2 = userdata["revenues"][1]
+                Gross_revenu_Year_3 = userdata["revenues"][2]
+                Gross_revenu_result_1 = Gross_revenu_result[0]
+                Gross_revenu_result_2 = Gross_revenu_result[1]
+                Gross_revenu_result_3 = Gross_revenu_result[2]
+                Net_earning_result,net_valuation= method_5(userdata["revenues"],userdata["expenses"],Earnings_Multiplier)
+                # print(f"Method 5 :{Net_earning_result}")
+                Net_earning_result_1 = Net_earning_result[0]
+                Net_earning_result_2 = Net_earning_result[1] 
+                Net_earning_result_3 = Net_earning_result[2]  
+                net_valuation_1 = net_valuation[0]
+                net_valuation_2 = net_valuation[1] 
+                net_valuation_3 = net_valuation[2] 
+                Liquidation_Value  = method_6(userdata["total_assets_financial_year"],userdata["total_liabilities_financial_year"])
+                # print(f"Method 6 :{Liquidation_Value}")
+                Liquidation_Value_1 = Liquidation_Value[0]
+                Liquidation_Value_2 = Liquidation_Value[1]
+                Liquidation_Value_3 = Liquidation_Value[2]
 
 
-            input_params = {
-            "zipCode" : userdata["zipCode"],
-            "businessType" : userdata["businessType"],
-            "currency" : userdata["currency"],
-            "Year_1" : userdata['financial_year_1'],
-            "Year_2" : userdata['financial_year_2'],
-            "Year_3" : userdata['financial_year_3'],
-            "Result_1" : Result_1,
-            "Result_2" : Result_2,
-            "Result_3" : Result_3,
-            "Result_Final" : Result_Final,
-            "Net_Profit_Year_1" : Net_Profit_Year_1,
-            "Net_Profit_Year_2" : Net_Profit_Year_2,
-            "Net_Profit_Year_3" : Net_Profit_Year_3,
-            "Net_Profit_result_1" : Net_Profit_result_1,
-            "Net_Profit_result_2" : Net_Profit_result_2,  
-            "Net_Profit_result_3" : Net_Profit_result_3,  
-            "Gross_revenu_Year_1" : Gross_revenu_Year_1,
-            "Gross_revenu_Year_2" : Gross_revenu_Year_2,
-            "Gross_revenu_Year_3" : Gross_revenu_Year_3,
-            "Gross_revenu_result_1" : Gross_revenu_result_1,
-            "Gross_revenu_result_2" : Gross_revenu_result_2,
-            "Gross_revenu_result_3" : Gross_revenu_result_3,
-            "Net_Profit_Year_1" : Net_Profit_Year_1,
-            "Net_Profit_Year_2" : Net_Profit_Year_2,
-            "Net_Profit_Year_3" : Net_Profit_Year_3,
-            "Net_earning_result_1" : Net_earning_result_1,
-            "Net_earning_result_2" : Net_earning_result_2,
-            "Net_earning_result_3" : Net_earning_result_3,
-            "net_valuation_1": net_valuation_1,
-            "net_valuation_2": net_valuation_2,
-            "net_valuation_3": net_valuation_3,
-            "Liquidation_Value_1" : Liquidation_Value_1,
-            "Liquidation_Value_2" : Liquidation_Value_2,
-            "Liquidation_Value_3" : Liquidation_Value_3,
-            "Discount_Rate": Discount_Rate,
-            "PE_Ratio" : PE_Ratio,
-            "Industry_Multiplier": Industry_Multiplier,
-            "Earnings_Multiplier" :Earnings_Multiplier,
-            "DCF" : DCF_result,
-            "pf_1": project_fcf[0],
-            "pf_2": project_fcf[1],
-            "pf_3": project_fcf[2],
-            "Terminal_vale": turminal_value,
-           
+                input_params = {
+                "zipCode" : userdata["zipCode"],
+                "businessType" : userdata["businessType"],
+                "currency" : userdata["currency"],
+                "Year_1" : userdata['financial_year_1'],
+                "Year_2" : userdata['financial_year_2'],
+                "Year_3" : userdata['financial_year_3'],
+                "Result_1" : Result_1,
+                "Result_2" : Result_2,
+                "Result_3" : Result_3,
+                "Result_Final" : Result_Final,
+                "Net_Profit_Year_1" : Net_Profit_Year_1,
+                "Net_Profit_Year_2" : Net_Profit_Year_2,
+                "Net_Profit_Year_3" : Net_Profit_Year_3,
+                "Net_Profit_result_1" : Net_Profit_result_1,
+                "Net_Profit_result_2" : Net_Profit_result_2,  
+                "Net_Profit_result_3" : Net_Profit_result_3,  
+                "Gross_revenu_Year_1" : Gross_revenu_Year_1,
+                "Gross_revenu_Year_2" : Gross_revenu_Year_2,
+                "Gross_revenu_Year_3" : Gross_revenu_Year_3,
+                "Gross_revenu_result_1" : Gross_revenu_result_1,
+                "Gross_revenu_result_2" : Gross_revenu_result_2,
+                "Gross_revenu_result_3" : Gross_revenu_result_3,
+                "Net_Profit_Year_1" : Net_Profit_Year_1,
+                "Net_Profit_Year_2" : Net_Profit_Year_2,
+                "Net_Profit_Year_3" : Net_Profit_Year_3,
+                "Net_earning_result_1" : Net_earning_result_1,
+                "Net_earning_result_2" : Net_earning_result_2,
+                "Net_earning_result_3" : Net_earning_result_3,
+                "net_valuation_1": net_valuation_1,
+                "net_valuation_2": net_valuation_2,
+                "net_valuation_3": net_valuation_3,
+                "Liquidation_Value_1" : Liquidation_Value_1,
+                "Liquidation_Value_2" : Liquidation_Value_2,
+                "Liquidation_Value_3" : Liquidation_Value_3,
+                "Discount_Rate": Discount_Rate,
+                "PE_Ratio" : PE_Ratio,
+                "Industry_Multiplier": Industry_Multiplier,
+                "Earnings_Multiplier" :Earnings_Multiplier,
+                "DCF" : DCF_result,
+                "pf_1": project_fcf[0],
+                "pf_2": project_fcf[1],
+                "pf_3": project_fcf[2],
+                "Terminal_vale": turminal_value,
+            
 
-        }
+            }
 
-            return input_params
+                return input_params
+            
+            except Exception as e:
+                logger.error(f"Error in all_imput_data function and erro is {e}")
+    
     
     
     def load_model(self,max_new_tokens,top_k,top_p,temperature):
 
-        llm = HuggingFaceEndpoint(
-            #https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/
-            #https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/
+        try:
 
-            endpoint_url="https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/",
-            # repo_id= repo_id,
-            max_new_tokens = max_new_tokens,
-            top_k = top_k,
-            top_p = top_p,
-            temperature = temperature,
-            huggingfacehub_api_token = self._hf_token,
-            timeout=300,
-           
-        )
-        # print(f"ht_token { self._hf_token}")
+            llm = HuggingFaceEndpoint(
+                #https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/
+                #https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/
 
-        return llm
+                endpoint_url="https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/",
+                # repo_id= repo_id,
+                max_new_tokens = max_new_tokens,
+                top_k = top_k,
+                top_p = top_p,
+                temperature = temperature,
+                huggingfacehub_api_token = self._hf_token,
+                timeout=300,
+            
+            )
+            # print(f"ht_token { self._hf_token}")
+
+            return llm
+        
+        except Exception as e:
+            logger.error(f"Error in load_model function and error is {e}")
     
 
 
@@ -261,10 +277,11 @@ class Response_Generation:
             ll_chain = LLMChain(llm = llm, prompt = promt)
             data  = ll_chain.invoke(input_param)
             response = data['text']
+            
             return response
         
         except Exception as e:
-            raise e
+            logger.error(f"Error in respone_result and erro is {e}")
 
     
 
