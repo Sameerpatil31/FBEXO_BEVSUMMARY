@@ -81,6 +81,28 @@ def get_dropdown_items():
         return items  # Return the items as a JSON response    
     except Exception as e:
         raise e
+    
+
+
+
+@app.route("/llmwakeupcall", methods = ['POST'])
+# @require_api_key
+def llmwakeupcall():
+    try:
+        if request.method == "POST":
+
+            
+            llm = obj.load_model(max_new_tokens=10,top_k=2,top_p=0.5,temperature=0.1)
+            result = llm.invoke(input="What is capital of India")
+            print(result)
+
+            app.logger.info(f"Response result: {result} (type: {type(result)})")
+          
+            return jsonify({"result":result})
+    except Exception as e:
+        # Handle the OperationalError and return a valid response
+        app.logger.error(f"Error {e}")
+        return jsonify({"error": str(e)})    
 
 
 
