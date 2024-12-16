@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_file
 # from quart import Quart, jsonify, request
 import sqlite3
 from src.BEV_SUMMARY.LlamaApp import Response_Generation
+from src.Pipeline.Business_validation import BEV_Validation
 from src.login import logger
 from flask_cors import CORS
 from functools import wraps
@@ -101,6 +102,7 @@ def llmwakeupcall():
             print(result)
 
             app.logger.info(f"Response result: {result} (type: {type(result)})")
+            logger.info("llm_Wakeup_call initiated")
           
             return jsonify({"result":result}),200
     except Exception as e:
@@ -108,6 +110,73 @@ def llmwakeupcall():
         app.logger.error(f"Error {e}")
         logger.error(f" Error in /llmwakeupcall end point and error is {e}")
         return jsonify({"error": str(e)}),500    
+    
+
+
+@app.route("/listbusinessforsale", methods = ['POST'])
+@require_api_key
+def listbusinessforsale():
+    try:
+        
+        file_info=[]
+        obj= BEV_Validation()
+
+        all_files = ["Business_Incorporation",
+                     "Profit_Loss_Latest",
+                     "Profit_Loss_2_Latest",
+                     "Profit_Loss_3_Latest",
+                     "Balance_Sheet_Latest",
+                     "Balance_Sheet_2_Latest",
+                     "Balance_Sheet_3_Latest",
+                     "Cash_Flow_Latest",
+                     "Cash_Flow_2_Latest",
+                     "Cash_Flow_3_Latest"
+                     ] 
+
+
+        all_params = [ "Company_Name",
+                 "Email",
+                 "Phone",
+                 "EIN",
+                 "Business_Type",
+                 "Address",
+                 "State",
+                 "City",
+                 "Zipcode"
+
+                ]     
+
+        received_params = {}
+        for param_key in all_params:
+            if param_key in request.form:
+                received_params[param_key] = request.form[param_key]       
+        for file_key in all_files:
+            if file_key in request.files:
+                file = request.files[file_key]
+                if file.filename != '': 
+                    obj.upload_bev_files_s3(
+                        file=file,
+                        object_name=file.filename,
+                        content_type=file.content_type
+                        )
+
+                    
+                    file_info.append(file.filename)
+                else:
+                    # return jsonify({'error': f'{file_key} is empty'}), 400  
+                    logger.info("There are no any files") 
+
+        EIN_Value =    received_params['EIN'] 
+        
+        validation_result = obj.return_result(EIN_Value)    
+
+        return jsonify({"Validation":f"{validation_result}"})          
+
+
+    except Exception as e:
+        logger.error(f"Error {e}")
+        # Consider returning an error response with a status code for failures
+        # return jsonify({'error': 'An error occurred during file upload'}), 500
 
 
 
@@ -116,5 +185,5 @@ def llmwakeupcall():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080,threaded =True)
+    app.run(host="0.0.0.0", port=8080,threaded =True,debug=True)
     
