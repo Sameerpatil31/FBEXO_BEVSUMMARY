@@ -1,6 +1,8 @@
 from src.BEV_Details.Business_Entity_Validation import BEV
 from src.BEV_Details.S3_Bucket_upload import s3_upload
 from src.BEV_Details.utils import upload_to_s3
+import shutil
+import os
 
 
 
@@ -19,6 +21,9 @@ class BEV_Validation:
     def return_public_url(self,ein,url:dict):
         obj_s3 = s3_upload()
         public_url = obj_s3.return_public_url(ein=ein,url=url)
+        folder_to_remove = os.path.join("BEV_PDF", f"{ein}")
+        if os.path.exists(folder_to_remove):
+           shutil.rmtree(folder_to_remove)
 
         return public_url
 

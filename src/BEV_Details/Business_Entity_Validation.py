@@ -104,8 +104,8 @@ class BEV:
             fatca= self.fatcacheck(business['company_name'])   
             blacklist = self.Sanctions_Blacklist_Check(fatca)   
 
-            business['fatca_comliant'] = fatca
-            business['blacklist'] = blacklist
+            business['fatca_comliant'] = fatca  # Compliant or not Compliant
+            business['blacklist'] = blacklist # Blacklist or not Blacklist
 
             data = json.dumps(business,indent=4)
             return data

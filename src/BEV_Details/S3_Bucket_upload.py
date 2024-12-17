@@ -10,14 +10,14 @@ class s3_upload:
 
 
     def save_local(self,ein,url:dict):
-        file_path_list_for_upload=[]
+        file_path_list_for_upload={}
         try:
 
             for k,v in url.items():
                 parentdir, folderpath= create_folders_bev(EIN=ein,pdf_file=k)
                 filepath = download_BEV_pdf(url=v,folder_name=folderpath)
 
-                file_path_list_for_upload.append(filepath)
+                file_path_list_for_upload[k] = filepath
                 logger.info(f"pdf path is {filepath}")
 
 
@@ -29,14 +29,14 @@ class s3_upload:
 
 
 
-    def s3_upload(self,filepathlist:list,foldername): 
+    def s3_upload(self,filepathlist:dict,foldername): 
         
-        public_pdf_list=[]
+        public_pdf_list={}
         try:
-            for file in filepathlist:
+            for k,file in filepathlist.items():
 
-                url_public = upload_file_s3(file,foldername)
-                public_pdf_list.append(url_public)
+                url_public = upload_file_s3(file_path=file,folder_name=f"{foldername}/{k}")
+                public_pdf_list[k] = url_public
                 logger.info(f"Public url is {url_public}")
 
 

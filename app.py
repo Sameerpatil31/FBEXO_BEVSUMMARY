@@ -138,12 +138,20 @@ def listbusinessforsale():
 
 
         EIN_Value =    all_params['EIN'] 
+        validation_result = obj.return_result(EIN_Value)
+
 
         public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
-        
-        validation_result = obj.return_result(EIN_Value)    
+        # os.removedirs(os.path.join("BEV_PDF",f"{EIN_Value}"))
+        return jsonify({"validation":f"{validation_result}","public_url":f"{public_url}"})
 
-        return jsonify({"validation":f"{validation_result}","public_url":f"{public_url}"})          
+        # if validation_result is not None:
+        #     public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
+        #     os.removedirs(os.path.join("BEV_PDF",f"{EIN_Value}"))
+        #     return jsonify({"validation":f"{validation_result}","public_url":f"{public_url}"})  
+        # else:
+        #     return jsonify({"validation":f"{validation_result}","public_url":"None"})
+
 
 
     except Exception as e:
