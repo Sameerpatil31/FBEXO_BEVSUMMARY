@@ -1,4 +1,5 @@
 from src.BEV_Details.Business_Entity_Validation import BEV
+from src.BEV_Details.S3_Bucket_upload import s3_upload
 from src.BEV_Details.utils import upload_to_s3
 
 
@@ -15,8 +16,11 @@ class BEV_Validation:
         return result
     
 
-    def upload_bev_files_s3(self,file,object_name,content_type):
-        upload_to_s3(file,bucket_name="fbexofile",object_name=object_name,content_type=content_type)
+    def return_public_url(self,ein,url:dict):
+        obj_s3 = s3_upload()
+        public_url = obj_s3.return_public_url(ein=ein,url=url)
+
+        return public_url
 
 
 if __name__ == '__main__':

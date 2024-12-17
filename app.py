@@ -121,56 +121,29 @@ def listbusinessforsale():
         file_info=[]
         obj= BEV_Validation()
 
-        all_files = ["Business_Incorporation",
-                     "Profit_Loss_Latest",
-                     "Profit_Loss_2_Latest",
-                     "Profit_Loss_3_Latest",
-                     "Balance_Sheet_Latest",
-                     "Balance_Sheet_2_Latest",
-                     "Balance_Sheet_3_Latest",
-                     "Cash_Flow_Latest",
-                     "Cash_Flow_2_Latest",
-                     "Cash_Flow_3_Latest"
-                     ] 
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Empty or invalid JSON provided"}), 400
+        
+
+        
+        all_params = data.get('all_params', {})
+        all_url = data.get('all_url', {})
+
+        filtered_urls = {key: value for key, value in all_url.items() if value}
+
+        # Debugging - Print the filtered data
+        print("All Params:", all_params)
+        print("Filtered URLs:", filtered_urls)
 
 
-        all_params = [ "Company_Name",
-                 "Email",
-                 "Phone",
-                 "EIN",
-                 "Business_Type",
-                 "Address",
-                 "State",
-                 "City",
-                 "Zipcode"
+        EIN_Value =    all_params['EIN'] 
 
-                ]     
-
-        received_params = {}
-        for param_key in all_params:
-            if param_key in request.form:
-                received_params[param_key] = request.form[param_key]       
-        for file_key in all_files:
-            if file_key in request.files:
-                file = request.files[file_key]
-                if file.filename != '': 
-                    obj.upload_bev_files_s3(
-                        file=file,
-                        object_name=file.filename,
-                        content_type=file.content_type
-                        )
-
-                    
-                    file_info.append(file.filename)
-                else:
-                    # return jsonify({'error': f'{file_key} is empty'}), 400  
-                    logger.info("There are no any files") 
-
-        EIN_Value =    received_params['EIN'] 
+        public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
         
         validation_result = obj.return_result(EIN_Value)    
 
-        return jsonify({"Validation":f"{validation_result}"})          
+        return jsonify({"validation":f"{validation_result}","public_url":f"{public_url}"})          
 
 
     except Exception as e:
