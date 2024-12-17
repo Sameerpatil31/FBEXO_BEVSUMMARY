@@ -18,42 +18,96 @@ class BEV:
         self._sdn = os.path.join('artifacts','sdn.csv')
 
 
-
-
     def einlookup(self):
-
         try:
-
-
-            url = "https://eintaxid.com/search-ajax.php" 
+            # Define the request URL and headers
+            url = "https://eintaxid.com/search-ajax.php"
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
             }
 
-            
+            # Payload with EIN query
             data = {
                 "query": str(self._ein)
             }
 
-            logger.info(f"Checking ein details")
-
-            # Send POST request
+            # Make a POST request
             response = requests.post(url, data=data, headers=headers)
+
+            # Parse the response HTML
             soup = BeautifulSoup(response.text, 'html.parser')
             panel_body = soup.find('div', class_='panel-body fixed-panel')
-            returndata = {
-            "company_name" : panel_body.find('a').text.strip(),
-            "ein_number" : panel_body.find('strong').text.strip().split(":")[-1].strip(),
-            "Doing_Business_As" : panel_body.find('strong', text='Doing Business As: ').find_next_sibling().text.strip(),
-            "address" : panel_body.find('strong', text='Address: ').next_sibling.strip(),
-            "phone" : panel_body.find('strong', text='Phone: ').next_sibling.strip()
 
-                }
-            
-            return json.dumps(returndata)   
+            # Check if panel_body exists
+            if not panel_body:
+                return json.dumps({"error": "No data found for the provided EIN."})
+
+            # Extract required fields safely
+            returndata = {
+                "company_name": (panel_body.find('a').text.strip() 
+                                if panel_body.find('a') else "N/A"),
+                "ein_number": (panel_body.find('strong').text.strip().split(":")[-1].strip() 
+                            if panel_body.find('strong') else "N/A"),
+                "Doing_Business_As": (panel_body.find('strong', text='Doing Business As: ').find_next_sibling().text.strip()
+                                    if panel_body.find('strong', text='Doing Business As: ') else "N/A"),
+                "address": (panel_body.find('strong', text='Address: ').next_sibling.strip()
+                            if panel_body.find('strong', text='Address: ') else "N/A"),
+                "phone": (panel_body.find('strong', text='Phone: ').next_sibling.strip()
+                        if panel_body.find('strong', text='Phone: ') else "N/A")
+            }
+
+            # Return the JSON-encoded result
+            return json.dumps(returndata, indent=4)
+
+        except requests.exceptions.RequestException as req_err:
+            # Handle network-related errors
+            return json.dumps({"error": f"Request error occurred: {req_err}"})
 
         except Exception as e:
-            logger.error(f"Error in function einlookup and error is : {e} ")
+            # Catch all other exceptions
+            return json.dumps({"error": f"An error occurred: {str(e)}"})
+
+
+
+
+
+
+
+
+    # def einlookup(self):
+
+    #     try:
+
+
+    #         url = "https://eintaxid.com/search-ajax.php" 
+    #         headers = {
+    #             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+    #         }
+
+            
+    #         data = {
+    #             "query": str(self._ein)
+    #         }
+
+    #         logger.info(f"Checking ein details")
+
+    #         # Send POST request
+    #         response = requests.post(url, data=data, headers=headers)
+    #         soup = BeautifulSoup(response.text, 'html.parser')
+    #         panel_body = soup.find('div', class_='panel-body fixed-panel')
+    #         returndata = {
+    #         "company_name" : panel_body.find('a').text.strip(),
+    #         "ein_number" : panel_body.find('strong').text.strip().split(":")[-1].strip(),
+    #         "Doing_Business_As" : panel_body.find('strong', text='Doing Business As: ').find_next_sibling().text.strip(),
+    #         "address" : panel_body.find('strong', text='Address: ').next_sibling.strip(),
+    #         "phone" : panel_body.find('strong', text='Phone: ').next_sibling.strip()
+
+    #             }
+            
+    #         return json.dumps(returndata)   
+
+    #     except Exception as e:
+    #         logger.error(f"Error in function einlookup and error is : {e} ")
 
 
 
@@ -69,8 +123,11 @@ class BEV:
           df_ffi= pd.read_csv(self._FFILIST)
           exists = business_name in df_ffi['FINm'].values
           if exists:
+              logger.info(f"fatca is Compliant")
               return "Compliant"
+              
           else:
+              logger.info(f"fatca is Not Compliant")
               return "Not Compliant"
 
         except Exception as e:
@@ -87,8 +144,10 @@ class BEV:
             df_sdn= pd.read_csv(self._sdn,header=None)
             exists = business_name in df_sdn[1].values
             if exists:
+                logger.info(f"Blacklist")
                 return "Blacklist"
             else:
+                logger.info(f"Not Blacklist")
                 return "Not Blacklist"
 
         except Exception as e:

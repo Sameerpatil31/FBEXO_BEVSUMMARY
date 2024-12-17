@@ -32,10 +32,11 @@ class s3_upload:
     def s3_upload(self,filepathlist:dict,foldername): 
         
         public_pdf_list={}
+        root_folder = "List_Business_For_Sale_PDF"
         try:
             for k,file in filepathlist.items():
 
-                url_public = upload_file_s3(file_path=file,folder_name=f"{foldername}/{k}")
+                url_public = upload_file_s3(file_path=file,folder_name=f"{root_folder}/{foldername}/{k}")
                 public_pdf_list[k] = url_public
                 logger.info(f"Public url is {url_public}")
 
