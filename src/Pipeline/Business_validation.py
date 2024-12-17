@@ -15,8 +15,9 @@ class BEV_Validation:
     def return_result(self,ein):
         bev_obj = BEV(ein)
         result = bev_obj.return_validation_json()
-        print(result)
-        return json.loads(result)
+        if result is not None:
+            print(result)
+            return json.loads(result)
     
 
     def return_public_url(self,ein,url:dict):

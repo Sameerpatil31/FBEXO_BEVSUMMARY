@@ -40,7 +40,7 @@ class BEV:
 
             # Check if panel_body exists
             if not panel_body:
-                return json.dumps({"error": "No data found for the provided EIN."})
+                return None
 
             # Extract required fields safely
             returndata = {
@@ -59,13 +59,16 @@ class BEV:
             # Return the JSON-encoded result
             return json.dumps(returndata, indent=4)
 
-        except requests.exceptions.RequestException as req_err:
-            # Handle network-related errors
-            return json.dumps({"error": f"Request error occurred: {req_err}"})
+        # except requests.exceptions.RequestException as req_err:
+        #     # Handle network-related errors
+        #     return json.dumps({"error": f"Request error occurred: {req_err}"})
 
         except Exception as e:
             # Catch all other exceptions
-            return json.dumps({"error": f"An error occurred: {str(e)}"})
+            logger.error(f"error in einlookup function and error is {e}")
+            return None
+            # return json.dumps({"error": f"An error occurred: {str(e)}"})
+           
 
 
 
@@ -159,15 +162,20 @@ class BEV:
         try:
 
             ein_details_json = self.einlookup()
-            business = json.loads(ein_details_json) 
-            fatca= self.fatcacheck(business['company_name'])   
-            blacklist = self.Sanctions_Blacklist_Check(fatca)   
+            if ein_details_json is not None:
+                business = json.loads(ein_details_json) 
+                print(business)
+            
+                fatca= self.fatcacheck(business['company_name'])   
+                blacklist = self.Sanctions_Blacklist_Check(fatca)   
 
-            business['fatca_comliant'] = fatca  # Compliant or not Compliant
-            business['blacklist'] = blacklist # Blacklist or not Blacklist
+                business['fatca_comliant'] = fatca  # Compliant or not Compliant
+                business['blacklist'] = blacklist # Blacklist or not Blacklist
 
-            data = json.dumps(business,indent=4)
-            return data
+                data = json.dumps(business,indent=4)
+                return data
+            else:
+                return None
 
         except Exception as e:
             logger.error(f"Error is {e}")    
