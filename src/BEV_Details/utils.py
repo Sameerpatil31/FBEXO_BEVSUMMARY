@@ -60,13 +60,13 @@ def upload_file_s3(file_path,folder_name = 'my-folder1/'):
 
     except FileNotFoundError:
         print("The file was not found.")
-        return None
+        return "None"
     except NoCredentialsError:
         print("AWS credentials not found.")
-        return None
+        return "None"
     except Exception as e:
         print(f"An error occurred: {e}")
-        return None
+        return "None"
 
 
 def upload_file_Obj(file,S3_BUCKET = 'fbexofile'):
