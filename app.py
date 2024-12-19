@@ -161,6 +161,75 @@ def listbusinessforsale():
 
 
 
+@app.route("/bevfullreportpurchase", methods = ['POST'])
+@require_api_key
+def bevfullreportpurchase():
+    try:
+
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Empty or invalid JSON provided"}), 400
+
+
+
+        all_params = data.get('all_params', {})
+        all_url = data.get('all_url', {})
+
+        filtered_urls = {key: value for key, value in all_url.items() if value}
+
+        # Debugging - Print the filtered data
+        print("All Params:", all_params)
+        print("Filtered URLs:", filtered_urls)    
+
+        EIN_Value =    all_params['EIN'] 
+
+
+
+        return jsonify({"public_url":{
+
+            "Business_Incorporation": "null",
+            "Profit_Loss_Latest": "null",
+            "Profit_Loss_2_Latest": "null",
+            "Profit_Loss_3_Latest": "null",
+            "Balance_Sheet_Latest": "null",
+            "Balance_Sheet_2_Latest": "null",
+            "Balance_Sheet_3_Latest": "null",
+            "Cash_Flow_Latest": "null",
+            "Cash_Flow_2_Latest": "null",
+            "Cash_Flow_3_Latest": "null"
+        }
+        }
+        
+        )
+    
+    except Exception as e:
+        logger.error(f"Error in bevfullreportpurchase end ponit api and error is {e}")
+    
+
+
+
+@app.route("/bevfullreport", methods = ['POST'])
+@require_api_key
+def bevfullreport():
+
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Empty or invalid JSON provided"}), 400
+    
+
+        all_params = data.get('all_params', {})
+
+        # if all_params:
+        report_url = "https://fbexofile.s3.eu-north-1.amazonaws.com/BEV_FULL_REPORT/123456789/BEV+Full+Report+for+Austin+Small+Business.pdf"
+        return jsonify({"report":report_url})
+        
+
+    except Exception as e:
+        logger.error(f"Error in bevfullreport end ponit api and error is {e}")        
+
+
+
 
 
 

@@ -49,7 +49,7 @@ def upload_file_s3(file_path,folder_name = 'my-folder1/'):
         s3.put_object(Bucket=bucket_name, Key=folder_name)
         print(f"Folder '{folder_name}' created successfully in bucket '{bucket_name}'.")
     
-        s3.upload_file(file_path, bucket_name, file_key)
+        s3.upload_file(file_path, bucket_name, file_key,ExtraArgs={'ACL': 'public-read','ContentType': 'application/pdf'})
         print(f"File '{file_name}' uploaded successfully to '{file_key}'.")
 
         # Generate the file's public URL
