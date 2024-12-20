@@ -226,7 +226,51 @@ def bevfullreport():
         
 
     except Exception as e:
-        logger.error(f"Error in bevfullreport end ponit api and error is {e}")        
+        logger.error(f"Error in bevfullreport end ponit api and error is {e}")   
+
+
+
+@app.route("/pivgenerateequest", methods = ['POST'])
+@require_api_key
+def pivgenerateequest():
+
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Empty or invalid JSON provided"}), 400
+    
+
+        all_params = data.get('all_params', {})
+
+        # if all_params:
+       
+        return jsonify({"message":"request accepted"})
+        
+
+    except Exception as e:
+        logger.error(f"Error in pevgenerateequest end ponit api and error is {e}")          
+
+
+@app.route("/pivreport", methods = ['POST'])
+@require_api_key
+def pivreport():
+
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Empty or invalid JSON provided"}), 400
+    
+
+        all_params = data.get('all_params', {})
+
+        # if all_params:
+       
+        report_url = "https://fbexofile.s3.eu-north-1.amazonaws.com/PIV_Full_Report/123456789/orderid123456/PIV_Full_Report_for_Chicago_Small_Business.pdf"
+        return jsonify({"report":report_url})
+        
+
+    except Exception as e:
+        logger.error(f"Error in pivreport end ponit api and error is {e}")                       
 
 
 
