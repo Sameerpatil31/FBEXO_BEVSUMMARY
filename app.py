@@ -19,9 +19,10 @@ load_dotenv()
 
 
 #'BevSummary2024'
+hf_key = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+openai_key = os.getenv('OPENAI_API_KEY')
 
-
-obj = Response_Generation(os.getenv('HUGGINGFACEHUB_API_TOKEN'))
+obj = Response_Generation(openai_key)
 
 app = Flask(__name__)
 # CORS(app)

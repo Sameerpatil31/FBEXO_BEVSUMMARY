@@ -10,6 +10,7 @@ import json
 from dotenv import load_dotenv
 import os
 from src.login import logger
+from src.BEV_SUMMARY.llm import Load_llm
 # Load environment variables from the .env file
 load_dotenv()
 
@@ -21,11 +22,12 @@ load_dotenv()
 
 
 class Response_Generation:
-    def __init__(self,hf_token):
+    def __init__(self,api_key):
      
         self._sqlite_DB_Path = os.path.join('artifacts','BEV_database.db')
-        self._hf_token = hf_token
+        # self._hf_token = hf_token
         self._system_promt = createpromt()
+        self.load_llm = Load_llm(api_key)
 
 
 
@@ -217,30 +219,30 @@ class Response_Generation:
     
     
     
-    def load_model(self,max_new_tokens,top_k,top_p,temperature):
+    # def load_model(self,max_new_tokens,top_k,top_p,temperature):
 
-        try:
+    #     try:
 
-            llm = HuggingFaceEndpoint(
-                #https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/
-                #https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/
+    #         llm = HuggingFaceEndpoint(
+    #             #https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/
+    #             #https://gsb9o7k6ngdzs23l.us-east-1.aws.endpoints.huggingface.cloud/
 
-                # endpoint_url="https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/",
-                repo_id= "meta-llama/Llama-3.3-70B-Instruct",
-                max_new_tokens = max_new_tokens,
-                top_k = top_k,
-                top_p = top_p,
-                temperature = temperature,
-                huggingfacehub_api_token = self._hf_token,
-                timeout=300,
+    #             # endpoint_url="https://xstk0cq74upa2tv9.us-east-1.aws.endpoints.huggingface.cloud/",
+    #             repo_id= "meta-llama/Llama-3.3-70B-Instruct",
+    #             max_new_tokens = max_new_tokens,
+    #             top_k = top_k,
+    #             top_p = top_p,
+    #             temperature = temperature,
+    #             huggingfacehub_api_token = self._hf_token,
+    #             timeout=300,
             
-            )
-            # print(f"ht_token { self._hf_token}")
+    #         )
+    #         # print(f"ht_token { self._hf_token}")
 
-            return llm
+    #         return llm
         
-        except Exception as e:
-            logger.error(f"Error in load_model function and error is {e}")
+    #     except Exception as e:
+    #         logger.error(f"Error in load_model function and error is {e}")
     
 
 
@@ -252,7 +254,7 @@ class Response_Generation:
         try:
            
 
-            llm = self.load_model(                            
+            llm = self.load_llm.openai_llm(                            
                             max_new_tokens=4000,
                             top_k=10,
                             top_p=0.25,
