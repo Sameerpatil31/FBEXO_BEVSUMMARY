@@ -328,6 +328,8 @@ The valuation summary shows the estimated business value using various valuation
 
 
 
+Make sure all font color should be same
+
 <|eot_id|><|start_header_id|>user<|end_header_id|>
 
 Your task is to provide clear and consice Business Estimation Value i.e. BEV CALCULATION and SUMMERY of given financial data.
