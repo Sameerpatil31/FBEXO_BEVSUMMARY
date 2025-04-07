@@ -726,7 +726,7 @@ Do not display any other section.
 Use all currency notation from {currency}
 
 
-
+Make sure all fonts colour looks perfect in same color.
 
 
 <|eot_id|><|start_header_id|>assistant<|end_header_id|>
