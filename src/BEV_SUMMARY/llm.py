@@ -20,7 +20,7 @@ class Load_llm:
         self.llm = ChatOpenAI(
             openai_api_key=self.api_key,
             model="o3-mini-2025-01-31",
-            temperature=temperature,
+            # temperature=temperature,
             max_completion_tokens=max_new_tokens,
             top_p=top_p,
             # top_k=top_k,
