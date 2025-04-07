@@ -23,7 +23,7 @@ class Load_llm:
             temperature=temperature,
             max_completion_tokens=max_new_tokens,
             top_p=top_p,
-            top_k=top_k,
+            # top_k=top_k,
            
         )
         return self.llm
