@@ -438,7 +438,8 @@ Use all currency notation from {currency}
 
 
 
-
+Make sure all font color should be same and visible clearly.
+Background color and font color should be defferent.
 <|eot_id|><|start_header_id|>assistant<|end_header_id|>
 
 """
