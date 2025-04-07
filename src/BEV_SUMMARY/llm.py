@@ -19,7 +19,7 @@ class Load_llm:
         # Initialize the LLM with the API key
         self.llm = ChatOpenAI(
             openai_api_key=self.api_key,
-            model="gpt-4o-2024-11-20",
+            model="o1-mini-2024-09-12",
             temperature=temperature,
             max_completion_tokens=max_new_tokens,
             top_p=top_p,
