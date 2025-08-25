@@ -155,7 +155,7 @@ def listbusinessforsale():
         if validation_result is not None:
             public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
             #to save pdf url  against EIN_Value
-            obj.save_pdf_url(ein=EIN_Value, pdf_url=public_url)
+            obj.save_pdf_url(ein=EIN_Value, url=public_url)
 
            
 
