@@ -1,4 +1,5 @@
 from src.BEV_Details.Business_Entity_Validation import BEV
+from src.BEV_Details.sql_db_operation import execute_query,fetch_query
 from src.BEV_Details.S3_Bucket_upload import s3_upload
 from src.BEV_Details.utils import upload_to_s3
 from src.login import logger
@@ -31,6 +32,48 @@ class BEV_Validation:
            
 
         return public_url
+
+
+
+    def save_pdf_url(self, ein, url):
+        """
+        Save PDF URL with EIN to the url_links table
+        
+        Args:
+            ein (str): EIN number
+            url (str): PDF URL to save
+            
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        try:
+            # Check if record exists
+            check_query = "SELECT COUNT(*) as count FROM url_links WHERE ein = ?"
+            result = fetch_query(check_query, (ein,))
+            
+            if result and result[0]['count'] > 0:
+                # Update existing record
+                update_query = """
+                UPDATE url_links 
+                SET url = ?, updated_at = GETDATE() 
+                WHERE ein = ?
+                """
+                execute_query(update_query, (url, ein))
+                logger.info(f"Updated PDF URL for EIN {ein}")
+            else:
+                # Insert new record
+                insert_query = """
+                INSERT INTO url_links (ein, url) 
+                VALUES (?, ?)
+                """
+                execute_query(insert_query, (ein, url))
+                logger.info(f"Inserted new PDF URL for EIN {ein}")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error saving PDF URL for EIN {ein}: {e}")
+            return False
 
 
 if __name__ == '__main__':

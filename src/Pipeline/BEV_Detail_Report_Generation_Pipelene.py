@@ -80,15 +80,48 @@
 
 
 from src.BEV_Details.Pipeline.reportupload_pipeline import BEVReportUpload
-
+from src.BEV_Details.sql_db_operation import execute_query
+from src.login import logger
 
 class BEVDetailReportGenerationPipeline:
-    def __init__(self, file_path_or_url):  
+    def __init__(self, file_path_or_url, ein):  
         self.file_path_or_url = file_path_or_url
+        self.ein = ein
 
     def run_pipeline(self):
         report_uploader = BEVReportUpload(self.file_path_or_url)
-        return report_uploader.generate_report_pipeline()
+        url = report_uploader.generate_report_pipeline()
+        # self.insert_url_link(self.ein, url)
+        return url
+
+    def insert_url_link(self, ein, url):
+        """
+        Insert a single record into url_links table
+        
+        Args:
+            ein (str): EIN number
+            url (str): URL to insert
+            
+        Returns:
+            bool: True if successful, False otherwise
+            
+        Raises:
+            Exception: If insertion fails
+        """
+        insert_query = """
+        INSERT INTO url_links (ein, url) 
+        VALUES (?, ?)
+        """
+        
+        try:
+            execute_query(insert_query, (ein, url))
+            logger.info(f"✅ Successfully inserted URL link: EIN={ein}, URL={url}")
+            return True
+        except Exception as e:
+            logger.error(f"❌ Failed to insert URL link: EIN={ein}, URL={url}, Error: {e}")
+            raise e
+        
+
     
 
 
