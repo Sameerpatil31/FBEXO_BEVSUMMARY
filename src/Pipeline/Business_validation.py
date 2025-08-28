@@ -38,39 +38,47 @@ class BEV_Validation:
     def save_pdf_url(self, ein, url):
         """
         Save PDF URL with EIN to the url_links table
-        
+
         Args:
             ein (str): EIN number
             url (str): PDF URL to save
-            
+
         Returns:
             bool: True if successful, False otherwise
         """
         try:
             # Check if record exists
             check_query = "SELECT COUNT(*) as count FROM url_links WHERE ein = ?"
-            result = fetch_query(check_query, (ein,))  # ✅ Single tuple parameter
-            
-            if result and result[0]['count'] > 0:
+            # Pass a list of tuples for executemany-style helpers
+            result = fetch_query(check_query, [(ein,)])  # changed
+
+            # Handle both dict-row and tuple-row shapes robustly
+            if result:
+                first = result
+                count = first['count'] if isinstance(first, dict) else first
+            else:
+                count = 0
+
+            if count > 0:
                 # Update existing record
                 update_query = """
-                UPDATE url_links 
-                SET url = ?, updated_at = GETDATE() 
+                UPDATE url_links
+                SET url = ?, updated_at = GETDATE()
                 WHERE ein = ?
                 """
-                execute_query(update_query, (url, ein))  # ✅ Multiple tuple parameters
+                execute_query(update_query, [(url, ein)])  # changed
                 logger.info(f"Updated PDF URL for EIN {ein}")
             else:
                 # Insert new record
                 insert_query = """
-                INSERT INTO url_links (ein, url) 
+                INSERT INTO url_links (ein, url)
                 VALUES (?, ?)
                 """
-                execute_query(insert_query, (ein, url))  # ✅ Multiple tuple parameters
+                execute_query(insert_query, [(ein, url)])  # changed
                 logger.info(f"Inserted new PDF URL for EIN {ein}")
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"Error saving PDF URL for EIN {ein}: {e}")
             return False
