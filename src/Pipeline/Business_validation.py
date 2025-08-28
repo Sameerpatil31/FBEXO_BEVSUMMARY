@@ -49,7 +49,7 @@ class BEV_Validation:
         try:
             # Check if record exists
             check_query = "SELECT COUNT(*) as count FROM url_links WHERE ein = ?"
-            result = fetch_query(check_query, [(ein,)])  # ✅ Wrapped in list
+            result = fetch_query(check_query, (ein,))  # ✅ Single tuple parameter
             
             if result and result[0]['count'] > 0:
                 # Update existing record
@@ -58,7 +58,7 @@ class BEV_Validation:
                 SET url = ?, updated_at = GETDATE() 
                 WHERE ein = ?
                 """
-                execute_query(update_query, [(url, ein)])  # ✅ Wrapped in list
+                execute_query(update_query, (url, ein))  # ✅ Multiple tuple parameters
                 logger.info(f"Updated PDF URL for EIN {ein}")
             else:
                 # Insert new record
@@ -66,7 +66,7 @@ class BEV_Validation:
                 INSERT INTO url_links (ein, url) 
                 VALUES (?, ?)
                 """
-                execute_query(insert_query, [(ein, url)])  # ✅ Wrapped in list
+                execute_query(insert_query, (ein, url))  # ✅ Multiple tuple parameters
                 logger.info(f"Inserted new PDF URL for EIN {ein}")
             
             return True
