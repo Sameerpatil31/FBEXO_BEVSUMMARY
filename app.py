@@ -155,6 +155,7 @@ def listbusinessforsale():
         if validation_result is not None:
             public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
             #to save pdf url  against EIN_Value
+            print(public_url)
             obj.save_pdf_url(ein=EIN_Value, url=public_url)
 
            
@@ -434,5 +435,5 @@ def pivreport():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080,threaded =True,debug=True)
+    app.run(host="0.0.0.0", port=8080,threaded =True)
     
