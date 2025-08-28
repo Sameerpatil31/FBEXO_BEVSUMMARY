@@ -25,7 +25,10 @@ class BEVDetailReportGenerationSaveDB:
             
             if result:
                 logger.info(f"✅ Retrieved PDF URL for EIN: {ein}")
-                return result[0]['url']
+                result_ = dict(result[0]['url'])
+                logger.info(f"PDF URL Data: {result_}")
+                logger.info(f"Business_Incorporation URL: {result_['Business_Incorporation']}")
+                return result_['Business_Incorporation']
             else:
                 logger.warning(f"⚠️ No PDF URL found for EIN: {ein}")
                 return None
