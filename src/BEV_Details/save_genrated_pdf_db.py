@@ -1,6 +1,6 @@
 from src.BEV_Details.sql_db_operation import execute_query,fetch_query
 from src.login import logger
-
+from sqlalchemy import text
 
 
 
@@ -20,9 +20,9 @@ class BEVDetailReportGenerationSaveDB:
             str: PDF URL if found, None otherwise
         """
         try:
-            query = "SELECT url FROM url_links WHERE ein = ?"
-            result = fetch_query(query, (ein,))
-            
+            query = text("SELECT url FROM url_links WHERE ein = :ein")
+            result = fetch_query(query, {"ein": ein})
+
             if result:
                 logger.info(f"✅ Retrieved PDF URL for EIN: {ein}")
                 result_ = dict(result[0]['url'])
@@ -53,13 +53,13 @@ class BEVDetailReportGenerationSaveDB:
         Raises:
             Exception: If insertion fails
         """
-        insert_query = """
+        insert_query = text("""
         INSERT INTO reportgenerated (ein, order_id, generated_report_url) 
-        VALUES (?, ?, ?)
-        """
-        
+        VALUES (:ein, :order_id, :generated_report_url)
+        """)
+
         try:
-            execute_query(insert_query, (ein, order_id, generated_report_url))
+            execute_query(insert_query, {"ein": ein, "order_id": order_id, "generated_report_url": generated_report_url})
             logger.info(f"✅ Successfully inserted report: EIN={ein}, Order_ID={order_id}, URL={generated_report_url}")
             return True
         except Exception as e:
@@ -80,9 +80,9 @@ class BEVDetailReportGenerationSaveDB:
             str: Generated report URL if found, None otherwise
         """
         try:
-            query = "SELECT generated_report_url FROM reportgenerated WHERE ein = ? AND order_id = ?"
-            result = fetch_query(query, (ein, order_id))
-            
+            query = text("SELECT generated_report_url FROM reportgenerated WHERE ein = :ein AND order_id = :order_id")
+            result = fetch_query(query, {"ein": ein, "order_id": order_id})
+
             if result:
                 logger.info(f"✅ Retrieved generated report for EIN: {ein}, Order_ID: {order_id}")
                 return result[0]['generated_report_url']
