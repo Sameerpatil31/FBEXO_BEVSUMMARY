@@ -61,7 +61,7 @@ class BEV_Validation:
                 WHERE ein = :ein
                 """)
                 # execute_query(update_query, {"url": url, "ein": ein, "url_type": url_type})
-                execute_query(update_query, {"url": str(url), "ein": ein})  # Use dict format
+                execute_query(update_query, {"url": url, "ein": ein})  # Use dict format
                 logger.info(f"Updated PDF URL for EIN {ein}")
             else:
                 # Insert new record
@@ -69,7 +69,7 @@ class BEV_Validation:
                 INSERT INTO url_links (ein, url)
                 VALUES (:ein, :url)
                 """)
-                execute_query(insert_query, {"ein": ein, "url": str(url)})  # Use dict format
+                execute_query(insert_query, {"ein": ein, "url": url})  # Use dict format
                 logger.info(f"Inserted new PDF URL for EIN {ein}")
 
             return True

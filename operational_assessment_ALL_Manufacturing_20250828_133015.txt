@@ -1,0 +1,81 @@
+
+Phase: Phase 1 - Business Process Analysis
+Task: Task 1 - Identify and Document Key Operational Workflows
+Industry: Manufacturing
+Prompt:
+Analyze workflows for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+================================================================================
+Phase: Phase 1 - Business Process Analysis
+Task: Task 2 - Create Process Flow Diagrams
+Industry: Manufacturing
+Prompt:
+Create process flow diagrams for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+================================================================================
+Phase: Phase 2 - Supply Chain Analysis
+Task: Task 3 - Analyze Supply Chain Structure
+Industry: Manufacturing
+Prompt:
+Analyze supply chain for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+================================================================================
+Phase: Phase 2 - Supply Chain Analysis
+Task: Task 4 - Map the Supply Chain
+Industry: Manufacturing
+Prompt:
+Map supply chain for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+================================================================================
+Phase: Phase 2 - Supply Chain Analysis
+Task: Task 5 - Assess Supply Chain Risks and Vulnerabilities
+Industry: Manufacturing
+Prompt:
+Assess supply chain risks for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+================================================================================
+Phase: Phase 3 - Performance Assessment and Benchmarking
+Task: Task 6 - Identify Key Operational Performance Indicators (KPIs)
+Industry: Manufacturing
+Prompt:
+Identify KPIs for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+================================================================================
+Phase: Phase 3 - Performance Assessment and Benchmarking
+Task: Task 7 - Benchmark Performance
+Industry: Manufacturing
+Prompt:
+Benchmark KPIs for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+================================================================================
+Phase: Phase 4 - Synthesis and Output
+Task: Task 8 - Synthesize Findings and Identify Strategic Operational Moves
+Industry: Manufacturing
+Prompt:
+Synthesize findings for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+================================================================================
+Phase: Phase 4 - Synthesis and Output
+Task: Task 9 - Create Operational Assessment Report
+Industry: Manufacturing
+Prompt:
+Create operational assessment report for Manufacturing
+
+Analysis:
+ERROR: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}

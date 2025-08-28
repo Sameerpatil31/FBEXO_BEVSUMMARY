@@ -1,44 +1,67 @@
-from src.BEV_Details.sql_db_operation import execute_query,fetch_query
+from src.BEV_Details.sql_db_operation import execute_query,fetch_query,fetch_query_one
 from src.login import logger
 from sqlalchemy import text
-
+import ast
 
 
 class BEVDetailReportGenerationSaveDB:
-    def __init__(self):
-        pass
-        
+    def __init__(self, ein, order_id):
+        self.ein = ein
+        self.order_id = order_id
 
-    def get_pdf_url_by_ein(ein):
-        """
-        Retrieve PDF URL by EIN from url_links table
-        
-        Args:
-            ein (str): EIN number
-            
-        Returns:
-            str: PDF URL if found, None otherwise
-        """
+    # def get_pdf_url_by_ein(self, ein):
+    #     try:
+    #         query = text("SELECT url FROM url_links WHERE ein = :ein")
+    #         result = fetch_query(query, {"ein": ein})
+
+    #         if result and len(result) > 0:
+    #             # If result[0] is a RowMapping (SQLAlchemy >=1.4)
+    #             url_value = result[0]['url'] if isinstance(result[0], dict) else result[0][0]
+    #             logger.info(f"Retrieved PDF URL for EIN {ein}: {url_value}")
+    #             url_value_ = dict(url_value)
+    #             print("pdf_url:", url_value_['Business_Incorporation'])
+    #             return url_value_['Business_Incorporation']
+    #         else:
+    #             logger.warning(f"No PDF URL found for EIN: {ein}")
+    #             return None
+
+    #     except Exception as e:
+    #         logger.error(f"Error retrieving PDF URL for EIN {ein}: {e}")
+    #         return None
+
+    def get_pdf_url_by_ein(self):
         try:
             query = text("SELECT url FROM url_links WHERE ein = :ein")
-            result = fetch_query(query, {"ein": ein})
+            result = fetch_query(query, {"ein": self.ein})
 
-            if result:
-                logger.info(f"✅ Retrieved PDF URL for EIN: {ein}")
-                result_ = dict(result[0]['url'])
-                logger.info(f"PDF URL Data: {result_}")
-                logger.info(f"Business_Incorporation URL: {result_['Business_Incorporation']}")
-                return result_['Business_Incorporation']
+            if result and len(result) > 0:
+                url_value = result[0]['url'] if isinstance(result[0], dict) else result[0][0]
+
+                # If url_value is JSON stored as string, parse it
+                if isinstance(url_value, str):
+                    import json
+                    url_value = json.loads(url_value)
+
+                logger.info(f"Retrieved PDF URL for EIN {self.ein}: {url_value}")
+
+                # Access Business_Incorporation directly
+                pdf_url = url_value.get("Business_Incorporation")
+                if pdf_url:
+                    print("pdf_url:", pdf_url)
+                    return pdf_url
+                else:
+                    logger.warning(f"No Business_Incorporation key found for EIN {self.ein}")
+                    return None
+
             else:
-                logger.warning(f"⚠️ No PDF URL found for EIN: {ein}")
+                logger.warning(f"No PDF URL found for EIN: {self.ein}")
                 return None
-                
-        except Exception as e:
-            logger.error(f"❌ Error retrieving PDF URL for EIN {ein}: {e}")
-            return None
-        
 
-    def insert_report_generated(self, ein, order_id, generated_report_url):
+        except Exception as e:
+            logger.error(f"Error retrieving PDF URL for EIN {self.ein}: {e}")
+            return None
+
+    def insert_report_generated(self, generated_report_url):
         """
         Insert a single record into reportgenerated table
         
@@ -59,16 +82,16 @@ class BEVDetailReportGenerationSaveDB:
         """)
 
         try:
-            execute_query(insert_query, {"ein": ein, "order_id": order_id, "generated_report_url": generated_report_url})
-            logger.info(f"✅ Successfully inserted report: EIN={ein}, Order_ID={order_id}, URL={generated_report_url}")
+            execute_query(insert_query, {"ein": self.ein, "order_id": self.order_id, "generated_report_url": generated_report_url})
+            logger.info(f"✅ Successfully inserted report: EIN={self.ein}, Order_ID={self.order_id}, URL={generated_report_url}")
             return True
         except Exception as e:
-            logger.error(f"❌ Failed to insert report: EIN={ein}, Order_ID={order_id}, URL={generated_report_url}, Error: {e}")
-            raise e   
+            logger.error(f"❌ Failed to insert report: EIN={self.ein}, Order_ID={self.order_id}, URL={generated_report_url}, Error: {e}")
+            raise e
 
 
 
-    def get_generated_report_by_ein_order(self, ein, order_id):
+    def get_generated_report_by_ein_order(self):
         """
         Retrieve generated report URL by EIN and order_id from reportgenerated table
         
@@ -81,15 +104,15 @@ class BEVDetailReportGenerationSaveDB:
         """
         try:
             query = text("SELECT generated_report_url FROM reportgenerated WHERE ein = :ein AND order_id = :order_id")
-            result = fetch_query(query, {"ein": ein, "order_id": order_id})
+            result = fetch_query(query, {"ein": self.ein, "order_id": self.order_id})
 
             if result:
-                logger.info(f"✅ Retrieved generated report for EIN: {ein}, Order_ID: {order_id}")
+                logger.info(f"✅ Retrieved generated report for EIN: {self.ein}, Order_ID: {self.order_id}")
                 return result[0]['generated_report_url']
             else:
-                logger.warning(f"⚠️ No generated report found for EIN: {ein}, Order_ID: {order_id}")
+                logger.warning(f"⚠️ No generated report found for EIN: {self.ein}, Order_ID: {self.order_id}")
                 return None
                 
         except Exception as e:
-            logger.error(f"❌ Error retrieving generated report for EIN {ein}, Order_ID {order_id}: {e}")
-            return None       
+            logger.error(f"❌ Error retrieving generated report for EIN {self.ein}, Order_ID {self.order_id}: {e}")
+            return None

@@ -1,0 +1,52 @@
+Phase: Phase 1  |  Task: Task 1  |  Company Type: Public Company
+
+----------------------------------------------------------------
+
+ERROR contacting Azure OpenAI: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+
+
+
+
+Phase: Phase 2  |  Task: Task 2  |  Company Type: Public Company
+
+----------------------------------------------------------------
+
+ERROR contacting Azure OpenAI: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+
+
+
+
+Phase: Phase 3  |  Task: Task 3  |  Company Type: Public Company
+
+----------------------------------------------------------------
+
+ERROR contacting Azure OpenAI: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+
+
+
+
+Phase: Phase 4  |  Task: Task 4  |  Company Type: Public Company
+
+----------------------------------------------------------------
+
+ERROR contacting Azure OpenAI: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+
+
+
+
+Phase: Phase 4  |  Task: Task 5  |  Company Type: Public Company
+
+----------------------------------------------------------------
+
+ERROR contacting Azure OpenAI: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+
+
+
+
+Phase: Phase 4  |  Task: Task 6  |  Company Type: Public Company
+
+----------------------------------------------------------------
+
+ERROR contacting Azure OpenAI: Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}
+
+

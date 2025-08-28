@@ -155,10 +155,9 @@ def listbusinessforsale():
         if validation_result is not None:
             public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
             #to save pdf url  against EIN_Value
-            print(public_url)
-            obj.save_pdf_url(ein=EIN_Value, url=public_url)
+            print("Public url:",public_url['Business_Incorporation'])
 
-           
+            obj.save_pdf_url(ein=EIN_Value, url=json.dumps(public_url))
 
             return jsonify({"validation": validation_result,"public_url":public_url})  
         else:
@@ -378,7 +377,9 @@ def bevfullreport():
 def pivgenerateequest():
 
     try:
+        
         data = request.get_json()
+        
         if not data:
             return jsonify({"error": "Empty or invalid JSON provided"}), 400
     
@@ -388,15 +389,18 @@ def pivgenerateequest():
         if all_params:
             EIN_Seller = all_params.get('EIN_Seller')
             Order_Id_Buyer = all_params.get('Order_Id_Buyer')
+            print(f"EIN_Seller: {EIN_Seller}, Order_Id_Buyer: {Order_Id_Buyer}")
+            bev_db = BEVDetailReportGenerationSaveDB(ein=EIN_Seller, order_id=Order_Id_Buyer)
 
-            bev_db = BEVDetailReportGenerationSaveDB()
-            pdf_url = bev_db.get_pdf_url_by_ein(EIN_Seller)
+            pdf_url = bev_db.get_pdf_url_by_ein()
             if pdf_url is None:
                 return jsonify({"error": "PDF URL not found"}), 404
 
-            report_generation_pipeline = BEVDetailReportGenerationPipeline(file_path_or_url=pdf_url)
+            print("pdf_url:", pdf_url)
+
+            report_generation_pipeline = BEVDetailReportGenerationPipeline(file_path_or_url=pdf_url, ein=EIN_Seller)
             pdf_url = report_generation_pipeline.run_pipeline()
-            bev_db.insert_report_generated(ein=EIN_Seller, order_id=Order_Id_Buyer, generated_report_url=pdf_url)
+            bev_db.insert_report_generated( generated_report_url=pdf_url)
 
         ## select two values from all_params one is EIN_Seller and Order_Id_Buyer. retrieve pdf url against EIN_Seller then start generate report and saved generated report against Order_Id_Buyer
         ## and EIN_Seller.
