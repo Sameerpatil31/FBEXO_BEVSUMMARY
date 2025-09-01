@@ -139,7 +139,10 @@ class PDFCompanyExtractor:
         # self.client = AzureOpenAIClient().get_client()
         self.deployment = self.deployment
 
+       
         self.prompt = """You are an AI specialized in extracting data from financial docs like 10-Ks. Order newest to oldest. Output JSON only."""
+    
+    
     def extract_text_from_pdf_url_temp(self, pdf_url: str) -> str:
         """
         Downloads a PDF file from a URL to a temporary file and extracts text.
@@ -752,7 +755,7 @@ class PDFCompanyExtractor:
         try:
         # Check if it's a URL or file path
             if file_path_or_url.startswith(('http://', 'https://')):
-                financial_doc = self.extract_text_from_pdf_url(file_path_or_url)
+                financial_doc = self.extract_text_from_pdf_url_temp(file_path_or_url)
             else:
                 financial_doc = self.extract_text_from_pdf(file_path_or_url)
                 
