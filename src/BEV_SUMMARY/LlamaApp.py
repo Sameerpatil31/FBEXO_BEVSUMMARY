@@ -256,13 +256,13 @@ class Response_Generation:
         try:
            
 
-            # llm = self.load_llm.openai_llm(                            
-            #                 max_new_tokens=4000,
-            #                 top_k=10,
-            #                 top_p=0.25,
-            #                 temperature=0.10,
+            llm = self.load_llm.openai_llm(                            
+                            max_new_tokens=4000,
+                            top_k=10,
+                            top_p=0.25,
+                            temperature=0.10,
                             
-            #                 )
+                            )
 
 
             user_data = self.parse_json(jsondata)
@@ -279,7 +279,7 @@ class Response_Generation:
 
             promt= PromptTemplate.from_template(self._system_promt )
 
-            ll_chain = LLMChain(llm = self.client, prompt = promt)
+            ll_chain = LLMChain(llm = llm, prompt = promt)
             data  = ll_chain.invoke(input_param)
             response = data['text']
             

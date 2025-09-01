@@ -54,13 +54,13 @@ jmespath==1.0.1
 joblib==1.4.2
 jsonpatch==1.33
 jsonpointer==3.0.0
-langchain==0.3.7
+langchain==0.3.27
 langchain-community==0.3.7
-langchain-core==0.3.19
+langchain-core==0.3.75
 langchain-huggingface==0.1.0
-langchain-openai==0.2.9
-langchain-text-splitters==0.3.0
-langsmith==0.1.143
+langchain-openai==0.3.32
+langchain-text-splitters==0.3.11
+langsmith==0.4.21
 lxml==5.3.0
 markdown-it-py==4.0.0
 MarkupSafe==2.1.5
@@ -113,7 +113,7 @@ smmap==5.0.2
 sniffio==1.3.1
 soupsieve==2.6
 SQLAlchemy==2.0.35
-
+# -e git+https://github.com/Sameerpatil31/FBEXO_BEVSUMMARY.git@eebe8b71fc8d30c38dd7a8d7a281346f6f6bab78#egg=src
 sympy==1.13.2
 tenacity==8.5.0
 threadpoolctl==3.5.0
@@ -134,8 +134,6 @@ Werkzeug==3.0.4
 yarl==1.11.1
 yfinance==0.2.65
 zipp==3.20.2
-
-
-
+zstandard==0.24.0
 
 -e .

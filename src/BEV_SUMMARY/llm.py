@@ -1,5 +1,6 @@
 from langchain_huggingface import HuggingFaceEndpoint
 from langchain_openai import ChatOpenAI
+# from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os
 from src.login import logger
@@ -17,6 +18,7 @@ class Load_llm:
 
     def openai_llm(self,max_new_tokens,top_k,top_p,temperature):
         # Initialize the LLM with the API key
+        ChatOpenAI.model_rebuild()
         self.llm = ChatOpenAI(
             openai_api_key=self.api_key,
             model="gpt-4o-2024-11-20",
