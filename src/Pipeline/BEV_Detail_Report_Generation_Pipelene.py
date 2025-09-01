@@ -90,7 +90,7 @@ class BEVDetailReportGenerationPipeline:
 
     def run_pipeline(self):
         report_uploader = BEVReportUpload(self.file_path_or_url)
-        url = report_uploader.generate_report_pipeline()
+        url = report_uploader.generate_report_pipeline(ein=self.ein)
         # self.insert_url_link(self.ein, url)
         return url
 

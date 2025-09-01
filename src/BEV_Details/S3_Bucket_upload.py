@@ -26,8 +26,15 @@ class s3_upload:
             logger.error(f"Error in save_local function and error is {e}")
 
 
+    def s3_upload_generated_pdf_report(self, ein, url):
+        root_folder = "List_Business_For_Sale_PDF"
 
-
+        try:
+            s3_url = upload_file_s3(file_path=url,folder_name=f"{root_folder}/{ein}/generated_report")
+            return s3_url
+        except Exception as e:
+            logger.error(f"Error in s3_upload_generated_pdf_report function and error is {e}")
+            return None
 
     def s3_upload(self,filepathlist:dict,foldername): 
         

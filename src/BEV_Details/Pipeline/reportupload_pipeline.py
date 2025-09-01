@@ -93,7 +93,7 @@ class BEVReportUpload:
         logger.info(f"Temporary directory created: {self.temp_dir}")
         logger.info(f"PDF will be saved as: {self.output_pdf_path}")
 
-    def generate_report_pipeline(self):
+    def generate_report_pipeline(self, ein):
         """
         Generate the report pipeline and upload to S3.
         Returns the S3 public URL of the uploaded PDF.
@@ -134,8 +134,8 @@ class BEVReportUpload:
                     logger.info(f"Report generated successfully with {pages_added} pages: {self.output_pdf_path}")
                     
                     # 5) Upload to S3 and get public URL
-                    s3_url = self.upload_to_s3()
-                    
+                    s3_url = self.upload_to_s3(ein=ein)
+
                     # 6) Cleanup temporary files
                     self.cleanup_temp_files()
                     
@@ -158,7 +158,7 @@ class BEVReportUpload:
         finally:
             logger.info("Report generation pipeline completed.")
 
-    def upload_to_s3(self):
+    def upload_to_s3(self, ein):
         """
         Upload the generated PDF to S3 bucket and return public URL.
         """
@@ -171,9 +171,8 @@ class BEVReportUpload:
             
             # Upload to S3 using the s3_upload function
             s3_url = self.s3_uploader.s3_upload_generated_pdf_report(
-                filepath=self.output_pdf_path,
-                foldername="generated_reports",
-                filename=self.output_pdf_filename
+                ein=ein,
+                url=self.output_pdf_path
             )
             
             if s3_url:
