@@ -355,8 +355,8 @@ def bevfullreport():
             print("All Params:", all_params)
             EIN_Seller = all_params.get('EIN_Seller')
             Order_Id_Buyer = all_params.get('Order_Id_Buyer')
-            bev_db = BEVDetailReportGenerationSaveDB()
-            pdf_url = bev_db.get_generated_report_by_ein_order(EIN_Seller, Order_Id_Buyer)
+            bev_db = BEVDetailReportGenerationSaveDB(ein=EIN_Seller, order_id=Order_Id_Buyer)
+            pdf_url = bev_db.get_generated_report_by_ein_order()
             if pdf_url is None:
                 return jsonify({"error": "PDF URL not found"}), 404
 
