@@ -1,4 +1,4 @@
-
+from src.LLM.azure_openai import AzureOpenAIClient
 from langchain_huggingface import HuggingFaceEndpoint
 # from langchain_community.llms import HuggingFaceEndpoint,huggingface_endpoint
 from src.BEV_SUMMARY.Prompt import PROMPT_SYSTEM_USER_ASSISTANT,createpromt
@@ -28,6 +28,8 @@ class Response_Generation:
         # self._hf_token = hf_token
         self._system_promt = createpromt()
         self.load_llm = Load_llm(api_key)
+        self.azure_client = AzureOpenAIClient()
+        self.client = self.azure_client.get_client()
 
 
 
@@ -254,13 +256,14 @@ class Response_Generation:
         try:
            
 
-            llm = self.load_llm.openai_llm(                            
-                            max_new_tokens=4000,
-                            top_k=10,
-                            top_p=0.25,
-                            temperature=0.10,
+            # llm = self.load_llm.openai_llm(                            
+            #                 max_new_tokens=4000,
+            #                 top_k=10,
+            #                 top_p=0.25,
+            #                 temperature=0.10,
                             
-                            )
+            #                 )
+
 
             user_data = self.parse_json(jsondata)
             # bussnesstype = user_data['business_type']
@@ -276,7 +279,7 @@ class Response_Generation:
 
             promt= PromptTemplate.from_template(self._system_promt )
 
-            ll_chain = LLMChain(llm = llm, prompt = promt)
+            ll_chain = LLMChain(llm = self.client, prompt = promt)
             data  = ll_chain.invoke(input_param)
             response = data['text']
             

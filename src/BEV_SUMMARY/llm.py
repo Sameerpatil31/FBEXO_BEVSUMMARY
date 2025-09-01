@@ -54,3 +54,15 @@ class Load_llm:
         
         except Exception as e:
             logger.error(f"Error in load_model function and error is {e}")
+
+
+    def azure_llm(self, max_new_tokens, top_k, top_p, temperature):
+
+        try:
+
+            
+           
+            pass
+
+        except Exception as e:
+            logger.error(f"Error in load_model function and error is {e}")
