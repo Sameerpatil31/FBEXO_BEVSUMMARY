@@ -277,7 +277,7 @@ class Response_Generation:
 
             print(f"Inpput parameter {input_param}")
 
-            prompt = PromptTemplate.from_template(self._system_prompt)
+            prompt = PromptTemplate.from_template(self._system_promt)
             messages = [
                 {"role": "system", "content": "You are financial report expert"},
                 {"role": "user", "content": f"{prompt} :: here all related metrics data : {input_param}"},
