@@ -1,5 +1,6 @@
 # import datetime
 from flask import Flask, request, jsonify,send_file
+import threading
 # from quart import Quart, jsonify, request
 import sqlite3
 from src.BEV_SUMMARY.LlamaApp import Response_Generation
@@ -372,43 +373,81 @@ def bevfullreport():
 
 
 
-@app.route("/pivgenerateequest", methods = ['POST'])
-@require_api_key
-def pivgenerateequest():
+# @app.route("/pivgenerateequest", methods = ['POST'])
+# @require_api_key
+# def pivgenerateequest():
 
-    try:
+#     try:
         
-        data = request.get_json()
+#         data = request.get_json()
         
-        if not data:
-            return jsonify({"error": "Empty or invalid JSON provided"}), 400
+#         if not data:
+#             return jsonify({"error": "Empty or invalid JSON provided"}), 400
     
 
-        all_params = data.get('all_params', {})
+#         all_params = data.get('all_params', {})
 
-        if all_params:
-            EIN_Seller = all_params.get('EIN_Seller')
-            Order_Id_Buyer = all_params.get('Order_Id_Buyer')
-            print(f"EIN_Seller: {EIN_Seller}, Order_Id_Buyer: {Order_Id_Buyer}")
-            bev_db = BEVDetailReportGenerationSaveDB(ein=EIN_Seller, order_id=Order_Id_Buyer)
+#         if all_params:
+#             EIN_Seller = all_params.get('EIN_Seller')
+#             Order_Id_Buyer = all_params.get('Order_Id_Buyer')
+#             print(f"EIN_Seller: {EIN_Seller}, Order_Id_Buyer: {Order_Id_Buyer}")
+#             bev_db = BEVDetailReportGenerationSaveDB(ein=EIN_Seller, order_id=Order_Id_Buyer)
 
-            pdf_url = bev_db.get_pdf_url_by_ein()
-            if pdf_url is None:
-                return jsonify({"error": "PDF URL not found"}), 404
+#             pdf_url = bev_db.get_pdf_url_by_ein()
+#             if pdf_url is None:
+#                 return jsonify({"error": "PDF URL not found"}), 404
 
-            print("pdf_url:", pdf_url)
+#             print("pdf_url:", pdf_url)
 
-            report_generation_pipeline = BEVDetailReportGenerationPipeline(file_path_or_url=pdf_url, ein=EIN_Seller)
-            pdf_url = report_generation_pipeline.run_pipeline()
-            bev_db.insert_report_generated( generated_report_url=pdf_url)
+#             report_generation_pipeline = BEVDetailReportGenerationPipeline(file_path_or_url=pdf_url, ein=EIN_Seller)
+#             pdf_url = report_generation_pipeline.run_pipeline()
+#             bev_db.insert_report_generated( generated_report_url=pdf_url)
 
-        ## select two values from all_params one is EIN_Seller and Order_Id_Buyer. retrieve pdf url against EIN_Seller then start generate report and saved generated report against Order_Id_Buyer
-        ## and EIN_Seller.
-            return jsonify({"message":"request accepted"})
+#         ## select two values from all_params one is EIN_Seller and Order_Id_Buyer. retrieve pdf url against EIN_Seller then start generate report and saved generated report against Order_Id_Buyer
+#         ## and EIN_Seller.
+#             return jsonify({"message":"request accepted"})
         
 
+#     except Exception as e:
+#         logger.error(f"Error in pevgenerateequest end ponit api and error is {e}")   
+# 
+
+
+JOBS = {}
+
+def long_job(job_id, ein, order_id):
+    try:
+        JOBS[job_id]["status"] = "running"
+        bev_db = BEVDetailReportGenerationSaveDB(ein=ein, order_id=order_id)
+        pdf_url = bev_db.get_pdf_url_by_ein()
+        if not pdf_url:
+            raise RuntimeError("PDF URL not found")
+        pipeline = BEVDetailReportGenerationPipeline(file_path_or_url=pdf_url, ein=ein)
+        result_url = pipeline.run_pipeline()
+        bev_db.insert_report_generated(result_url)
+        JOBS[job_id]["status"] = "completed"
+        JOBS[job_id]["result_url"] = result_url
     except Exception as e:
-        logger.error(f"Error in pevgenerateequest end ponit api and error is {e}")          
+        JOBS[job_id]["status"] = "failed"
+        JOBS[job_id]["error"] = str(e)
+
+
+@app.route("/pivgenerateequest", methods=["POST"])
+@require_api_key
+def pivgenerateequest():
+    data = request.get_json(silent=True)
+    if not data or "all_params" not in data:
+        return jsonify({"error": "Invalid JSON"}), 400
+    ein = data["all_params"].get("EIN_Seller")
+    order_id = data["all_params"].get("Order_Id_Buyer")
+    if not ein or not order_id:
+        return jsonify({"error": "Missing EIN_Seller or Order_Id_Buyer"}), 400
+
+    job_id = str(len(JOBS) + 1)
+    JOBS[job_id] = {"status": "queued"}
+    threading.Thread(target=long_job, args=(job_id, ein, order_id), daemon=True).start()
+
+    return jsonify({"message": "request accepted", "job_id": job_id}), 202        
 
 
 @app.route("/pivreport", methods = ['POST'])
