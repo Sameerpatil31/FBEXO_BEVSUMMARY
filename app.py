@@ -121,55 +121,107 @@ def llmwakeupcall():
     
 
 
-@app.route("/listbusinessforsale", methods = ['POST'])
+# @app.route("/listbusinessforsale", methods = ['POST'])
+# @require_api_key
+# def listbusinessforsale():
+#     try:
+        
+#         file_info=[]
+#         obj= BEV_Validation()
+
+#         data = request.get_json()
+#         if not data:
+#             return jsonify({"error": "Empty or invalid JSON provided"}), 400
+        
+
+        
+#         all_params = data.get('all_params', {})
+#         all_url = data.get('all_url', {})
+
+#         filtered_urls = {key: value for key, value in all_url.items() if value}
+
+#         # Debugging - Print the filtered data
+#         print("All Params:", all_params)
+#         print("Filtered URLs:", filtered_urls)
+
+
+#         EIN_Value =    all_params['EIN'] 
+#         validation_result = obj.return_result(EIN_Value)
+
+
+#         # public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
+        
+#         # return jsonify({"validation":f"{validation_result}","public_url":f"{public_url}"})
+
+#         if validation_result is not None:
+#             public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
+#             #to save pdf url  against EIN_Value
+#             print("Public url:",public_url['Business_Incorporation'])
+
+#             obj.save_pdf_url(ein=EIN_Value, url=json.dumps(public_url))
+
+#             return jsonify({"validation": validation_result,"public_url":public_url})  
+#         else:
+#             return jsonify({"validation": validation_result})
+
+
+
+#     except Exception as e:
+#         logger.error(f"Error {e}")
+#         # Consider returning an error response with a status code for failures
+#         # return jsonify({'error': 'An error occurred during file upload'}), 500
+
+
+@app.route("/listbusinessforsale", methods=['POST'])
 @require_api_key
 def listbusinessforsale():
     try:
+        obj = BEV_Validation()
         
-        file_info=[]
-        obj= BEV_Validation()
-
         data = request.get_json()
         if not data:
             return jsonify({"error": "Empty or invalid JSON provided"}), 400
         
-
-        
         all_params = data.get('all_params', {})
         all_url = data.get('all_url', {})
-
-        filtered_urls = {key: value for key, value in all_url.items() if value}
-
-        # Debugging - Print the filtered data
-        print("All Params:", all_params)
-        print("Filtered URLs:", filtered_urls)
-
-
-        EIN_Value =    all_params['EIN'] 
-        validation_result = obj.return_result(EIN_Value)
-
-
-        # public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
         
-        # return jsonify({"validation":f"{validation_result}","public_url":f"{public_url}"})
+        # Filter non-empty URLs
+        filtered_urls = {key: value for key, value in all_url.items() if value}
+        
+        # Validate required parameters
+        if 'EIN' not in all_params:
+            return jsonify({"error": "Missing required parameter: EIN"}), 400
+        
+        EIN_Value = all_params['EIN']
+        
+        # Perform validation
+        validation_result = obj.return_result(EIN_Value)
+        
+        if validation_result is None:
+            return jsonify({"error": "Validation failed or no result returned"}), 500
 
-        if validation_result is not None:
-            public_url = obj.return_public_url(ein=EIN_Value,url=filtered_urls)
-            #to save pdf url  against EIN_Value
-            print("Public url:",public_url['Business_Incorporation'])
-
+        compliant = validation_result.get("fatca_comliant", "Not Compliant")
+        blacklist = validation_result.get("blacklist", "Not Blacklist")
+        
+        if compliant == "Not Compliant" and blacklist == "Not Blacklist":
+            # Generate public URLs and save
+            public_url = obj.return_public_url(ein=EIN_Value, url=filtered_urls)
             obj.save_pdf_url(ein=EIN_Value, url=json.dumps(public_url))
-
-            return jsonify({"validation": validation_result,"public_url":public_url})  
+            
+            return jsonify({
+                "validation": validation_result,
+                "public_url": public_url
+            }), 200
+        
         else:
-            return jsonify({"validation": validation_result})
-
-
-
+            return jsonify({
+                "validation": "Not validated",
+                "validation_result": validation_result
+            }), 200
+    
     except Exception as e:
-        logger.error(f"Error {e}")
-        # Consider returning an error response with a status code for failures
-        # return jsonify({'error': 'An error occurred during file upload'}), 500
+        logger.error(f"Error occurred: {e}")
+        return jsonify({"error": "An error occurred during processing"}), 500
 
 
 
@@ -356,9 +408,9 @@ def pivreport():
         report_url = pdf_url
         return jsonify({"report":report_url})
         
-
+    
     except Exception as e:
-        logger.error(f"Error in bevfullreport end ponit api and error is {e}")   
+        logger.error(f"Error in pivreport end ponit api and error is {e}")   
                        
 
 
