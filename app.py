@@ -341,15 +341,25 @@ def pivreport():
     
 
         all_params = data.get('all_params', {})
+        if all_params:
+            print("All Params:", all_params)
+            EIN_Seller = all_params.get('EIN_Seller')
+            Order_Id_Buyer = all_params.get('Order_Id_Buyer')
+            bev_db = BEVDetailReportGenerationSaveDB(ein=EIN_Seller, order_id=Order_Id_Buyer)
+            pdf_url = bev_db.get_generated_report_by_ein_order()
+            if pdf_url is None:
+                return jsonify({"error": "PDF URL not found"}), 404
+
+        ## retirve report from db aginst EIN_Seller and Order_Id_Buyer and return pdf url
 
         # if all_params:
-       
-        report_url = "https://fbexofile.s3.eu-north-1.amazonaws.com/PIV_Full_Report/123456789/orderid123456/PIV_Full_Report_for_Chicago_Small_Business.pdf"
+        report_url = pdf_url
         return jsonify({"report":report_url})
         
 
     except Exception as e:
-        logger.error(f"Error in pivreport end ponit api and error is {e}")                       
+        logger.error(f"Error in bevfullreport end ponit api and error is {e}")   
+                       
 
 
 
