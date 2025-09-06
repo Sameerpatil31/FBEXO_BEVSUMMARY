@@ -117,7 +117,7 @@ class ExecutiveSummaryReportGeneration:
         
 
             messages = [
-                {"role": "system", "content": "You are financial report expert. Return your answer strictly as valid JSON."},
+                {"role": "system", "content": "You are financial report expert."},
                 {"role": "user", "content": f"{prompt_finance} :: here all related metrics data : {finance_metrics}"},
             ]
 
@@ -127,7 +127,7 @@ class ExecutiveSummaryReportGeneration:
                     model=os.getenv("DEPLOYMENT_NAME"),  # Use the deployment name instead of model name
                     messages=messages,
                     temperature=0.7,
-                    response_format={"type": "json_object"},
+                    # response_format={"type": "json_object"},
                 )
 
             response_content = response.choices[0].message.content

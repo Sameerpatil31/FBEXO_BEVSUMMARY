@@ -1,6 +1,6 @@
 # import datetime
 from flask import Flask, request, jsonify,send_file
-import threading
+# import threading
 # from quart import Quart, jsonify, request
 import sqlite3
 from src.BEV_SUMMARY.LlamaApp import Response_Generation
@@ -171,126 +171,6 @@ def listbusinessforsale():
         # Consider returning an error response with a status code for failures
         # return jsonify({'error': 'An error occurred during file upload'}), 500
 
-# report_status = {}
-
-# @app.route("/listbusinessforsale", methods = ['POST'])
-# @require_api_key
-# def listbusinessforsale():
-#     try:
-
-#         file_info=[]
-#         obj= BEV_Validation()
-
-#         data = request.get_json()
-#         if not data:
-#             return jsonify({"error": "Empty or invalid JSON provided"}), 400
-        
-
-#         all_params = data.get('all_params', {})
-#         all_url = data.get('all_url', {})
-
-#         filtered_urls = {key: value for key, value in all_url.items() if value}
-
-#         # Debugging - Print the filtered data
-#         print("All Params:", all_params)
-#         print("Filtered URLs:", filtered_urls)
-
-#         EIN_Value = all_params['EIN'] 
-#         validation_result = obj.return_result(EIN_Value)
-
-
-#         if validation_result is not None:
-#             public_url = obj.return_public_url(ein=EIN_Value, url=filtered_urls)
-            
-#             # Generate unique task ID
-#             task_id = str(uuid.uuid4())
-            
-#             # Initialize status
-#             report_status[task_id] = {
-#                 "status": "processing",
-#                 "message": "Report generation started",
-#                 "created_at": datetime.now().isoformat(),
-#                 "ein": EIN_Value,
-#                 "public_url": public_url,
-#                 "report_url": None,
-#                 "error": None
-#             }
-            
-#             # Start background task
-#             thread = threading.Thread(
-#                 target=generate_report_background,
-#                 args=(task_id, public_url, EIN_Value)
-#             )
-#             thread.daemon = True
-#             thread.start()
-            
-#             return jsonify({
-#                 "validation": validation_result,
-#                 "public_url": public_url,
-#                 "task_id": task_id,
-#                 "status": "processing",
-#                 "message": "Report generation started. Use task_id to check status.",
-#                 "estimated_time": "5-7 minutes"
-#             })
-#         else:
-#             return jsonify({"validation": validation_result})
-
-
-
-#     except Exception as e:
-#         logger.error(f"Error {e}")
-#         return jsonify({'error': 'An error occurred during file upload'}), 500
-
-# def generate_report_background(task_id, public_url, ein_value):
-#     """Background function to generate the report"""
-#     try:
-#         logger.info(f"Starting background report generation for task: {task_id}")
-        
-#         # Update status to processing
-#         report_status[task_id]["status"] = "processing"
-#         report_status[task_id]["message"] = "Generating report..."
-        
-#         # Run the report generation pipeline
-#         report_generation_pipeline = BEVDetailReportGenerationPipeline(file_path_or_url=public_url, ein=ein_value)
-#          # Assuming run_pipeline returns the report URL
-#         result = report_generation_pipeline.run_pipeline()
-        
-#         # Update status to completed
-#         report_status[task_id]["status"] = "completed"
-#         report_status[task_id]["message"] = "Report generated successfully"
-#         report_status[task_id]["report_url"] = result  # Assuming run_pipeline returns the report URL
-#         report_status[task_id]["completed_at"] = datetime.now().isoformat()
-        
-#         logger.info(f"Background report generation completed for task: {task_id}")
-        
-#     except Exception as e:
-#         logger.error(f"Error in background report generation for task {task_id}: {e}")
-        
-#         # Update status to failed
-#         report_status[task_id]["status"] = "failed"
-#         report_status[task_id]["message"] = f"Report generation failed: {str(e)}"
-#         report_status[task_id]["error"] = str(e)
-#         report_status[task_id]["failed_at"] = datetime.now().isoformat()
-
-# # Add endpoint to check report status
-# @app.route("/reportstatus/<task_id>", methods=['GET'])
-# @require_api_key
-# def check_report_status(task_id):
-#     """Check the status of report generation"""
-#     try:
-#         if task_id not in report_status:
-#             return jsonify({"error": "Task ID not found"}), 404
-        
-#         status_info = report_status[task_id]
-        
-#         # Clean up old completed/failed tasks (optional)
-#         # You might want to implement a cleanup mechanism
-        
-#         return jsonify(status_info)
-        
-#     except Exception as e:
-#         logger.error(f"Error checking report status: {e}")
-#         return jsonify({"error": "Internal server error"}), 500
 
 
 
