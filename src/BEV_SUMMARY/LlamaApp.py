@@ -277,30 +277,30 @@ class Response_Generation:
 
             print(f"Inpput parameter {input_param}")
 
-            prompt = PromptTemplate.from_template(self._system_promt)
-            messages = [
-                {"role": "system", "content": "You are financial report expert"},
-                {"role": "user", "content": f"{prompt} :: here all related metrics data : {input_param}"},
-            ]
+            promt = PromptTemplate.from_template(self._system_promt)
+            # messages = [
+            #     {"role": "system", "content": "You are financial report expert"},
+            #     {"role": "user", "content": f"{prompt} :: here all related metrics data : {input_param}"},
+            # ]
 
            
 
-            response = self.client.chat.completions.create(
-                    model=os.getenv("DEPLOYMENT_NAME"),  # Use the deployment name instead of model name
-                    messages=messages,
-                    temperature=0.7,
+            # response = self.client.chat.completions.create(
+            #         model=os.getenv("DEPLOYMENT_NAME"),  # Use the deployment name instead of model name
+            #         messages=messages,
+            #         temperature=0.7,
                     
-                )
+            #     )
 
-            response_content = response.choices[0].message.content
+            # response_content = response.choices[0].message.content
 
 
 
-            # ll_chain = LLMChain(llm = llm, prompt = promt)
-            # data  = ll_chain.invoke(input_param)
-            # response = data['text']
+            ll_chain = LLMChain(llm = llm, prompt = promt)
+            data  = ll_chain.invoke(input_param)
+            response = data['text']
             
-            return response_content
+            return response
         
         except Exception as e:
             logger.error(f"Error in respone_result and erro is {e}")

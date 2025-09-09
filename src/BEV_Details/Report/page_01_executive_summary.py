@@ -135,7 +135,7 @@ class ExecutiveSummaryReportGeneration:
                 logger.error("Empty response from OpenAI API")
                 return {"error": "Empty response from OpenAI API"}
             
-            return json.loads(response_content)
+            return response_content
         except Exception as e:
             logger.error(f"Error generating finance report: {str(e)}")
             return {"error": str(e)}     
