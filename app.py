@@ -366,14 +366,14 @@ def long_job(job_id, ein, order_id):
         JOBS[job_id]["status"] = "failed"
         JOBS[job_id]["error"] = str(e)
 
-def send_report(url_report: str, order_id: int):
+def send_report(url_report: str, order_id):
     url = "https://fbexo.com/wp-json/fbexo-webhook/v1/report"
     headers = {
         "X-Webhook-Token": "BevSummary2024",
         "Content-Type": "application/json"
     }
     payload = {
-        "order_id": order_id,
+        "order_id": str(order_id),
         "report": url_report
     }
 
