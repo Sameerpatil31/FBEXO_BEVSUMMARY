@@ -1,5 +1,6 @@
 # import datetime
 from flask import Flask, request, jsonify,send_file
+import requests
 # import threading
 # from quart import Quart, jsonify, request
 import sqlite3
@@ -179,6 +180,7 @@ def listbusinessforsale():
         obj = BEV_Validation()
         
         data = request.get_json()
+        print("data",data)
         if not data:
             return jsonify({"error": "Empty or invalid JSON provided"}), 400
         
@@ -357,11 +359,33 @@ def long_job(job_id, ein, order_id):
         pipeline = BEVDetailReportGenerationPipeline(file_path_or_url=pdf_url, ein=ein)
         result_url = pipeline.run_pipeline()
         bev_db.insert_report_generated(result_url)
+        send_report(result_url, order_id)
         JOBS[job_id]["status"] = "completed"
         JOBS[job_id]["result_url"] = result_url
     except Exception as e:
         JOBS[job_id]["status"] = "failed"
         JOBS[job_id]["error"] = str(e)
+
+def send_report(url_report: str, order_id: int):
+    url = "https://fbexo.com/wp-json/fbexo-webhook/v1/report"
+    headers = {
+        "X-Webhook-Token": "BevSummary2024",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "order_id": order_id,
+        "report": url_report
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()  # Raise error for bad status
+        print("✅ Report sent for Notification successfully!")
+        print("Response:", response.json())
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print("❌ Error sending report:", e)
+        return None        
 
 
 @app.route("/pivgenerateequest", methods=["POST"])

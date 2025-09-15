@@ -9,24 +9,38 @@ class BEVDetailReportGenerationSaveDB:
         self.ein = ein
         self.order_id = order_id
 
-    # def get_pdf_url_by_ein(self, ein):
+ 
+
+    # def get_pdf_url_by_ein(self):
     #     try:
     #         query = text("SELECT url FROM url_links WHERE ein = :ein")
-    #         result = fetch_query(query, {"ein": ein})
+    #         result = fetch_query(query, {"ein": self.ein})
 
     #         if result and len(result) > 0:
-    #             # If result[0] is a RowMapping (SQLAlchemy >=1.4)
     #             url_value = result[0]['url'] if isinstance(result[0], dict) else result[0][0]
-    #             logger.info(f"Retrieved PDF URL for EIN {ein}: {url_value}")
-    #             url_value_ = dict(url_value)
-    #             print("pdf_url:", url_value_['Business_Incorporation'])
-    #             return url_value_['Business_Incorporation']
+
+    #             # If url_value is JSON stored as string, parse it
+    #             if isinstance(url_value, str):
+    #                 import json
+    #                 url_value = json.loads(url_value)
+
+    #             logger.info(f"Retrieved PDF URL for EIN {self.ein}: {url_value}")
+
+    #             # Access Business_Incorporation directly
+    #             pdf_url = url_value.get("Business_Incorporation")
+    #             if pdf_url:
+    #                 print("pdf_url:", pdf_url)
+    #                 return pdf_url
+    #             else:
+    #                 logger.warning(f"No Business_Incorporation key found for EIN {self.ein}")
+    #                 return None
+
     #         else:
-    #             logger.warning(f"No PDF URL found for EIN: {ein}")
+    #             logger.warning(f"No PDF URL found for EIN: {self.ein}")
     #             return None
 
     #     except Exception as e:
-    #         logger.error(f"Error retrieving PDF URL for EIN {ein}: {e}")
+    #         logger.error(f"Error retrieving PDF URL for EIN {self.ein}: {e}")
     #         return None
 
     def get_pdf_url_by_ein(self):
@@ -42,24 +56,28 @@ class BEVDetailReportGenerationSaveDB:
                     import json
                     url_value = json.loads(url_value)
 
-                logger.info(f"Retrieved PDF URL for EIN {self.ein}: {url_value}")
+                logger.info(f"Retrieved URL data for EIN {self.ein}: {url_value}")
 
-                # Access Business_Incorporation directly
-                pdf_url = url_value.get("Business_Incorporation")
-                if pdf_url:
-                    print("pdf_url:", pdf_url)
-                    return pdf_url
+                # Collect only valid URLs (values that are strings starting with http)
+                if isinstance(url_value, dict):
+                    all_urls = [v for v in url_value.values() if isinstance(v, str) and v.startswith("http")]
+                    if all_urls:
+                        print("all_urls:", all_urls)
+                        return all_urls
+                    else:
+                        logger.warning(f"No valid URLs found for EIN {self.ein}")
+                        return []
                 else:
-                    logger.warning(f"No Business_Incorporation key found for EIN {self.ein}")
-                    return None
+                    logger.warning(f"URL data for EIN {self.ein} is not a dictionary")
+                    return []
 
             else:
-                logger.warning(f"No PDF URL found for EIN: {self.ein}")
-                return None
+                logger.warning(f"No URL found for EIN: {self.ein}")
+                return []
 
         except Exception as e:
-            logger.error(f"Error retrieving PDF URL for EIN {self.ein}: {e}")
-            return None
+            logger.error(f"Error retrieving URLs for EIN {self.ein}: {e}")
+            return []
 
     def insert_report_generated(self, generated_report_url):
         """
@@ -116,3 +134,13 @@ class BEVDetailReportGenerationSaveDB:
         except Exception as e:
             logger.error(f"❌ Error retrieving generated report for EIN {self.ein}, Order_ID {self.order_id}: {e}")
             return None
+
+
+
+
+if "__name__" == "__main__":
+    ein = "320510248"
+    order_id = 3837
+    bev_db = BEVDetailReportGenerationSaveDB(ein=ein, order_id=order_id)
+    pdf_url = bev_db.get_pdf_url_by_ein()
+

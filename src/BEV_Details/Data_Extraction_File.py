@@ -753,13 +753,15 @@ class PDFCompanyExtractor:
         # if not financial_doc:
         #     return {"error": "No financial data found in the document."}
         try:
+            financial_doc_ = ""
         # Check if it's a URL or file path
-            if file_path_or_url.startswith(('http://', 'https://')):
-                financial_doc = self.extract_text_from_pdf_url_temp(file_path_or_url)
-            else:
-                financial_doc = self.extract_text_from_pdf(file_path_or_url)
-                
-            if not financial_doc:
+            for file_url in file_path_or_url:
+                if file_url.startswith(('http://', 'https://')):
+                    financial_doc_ += self.extract_text_from_pdf_url_temp(file_url)
+                else:
+                    financial_doc_ += self.extract_text_from_pdf(file_url)
+
+            if not financial_doc_:
                 return {"error": "No financial data found in the document."}
 
         except Exception as e:
@@ -769,42 +771,42 @@ class PDFCompanyExtractor:
         final_report = {}
 
         try:
-            final_report['company_info'] = self.extract_company_info(financial_doc)
+            final_report['company_info'] = self.extract_company_info(financial_doc_)
         except Exception as e:
             final_report['company_info'] = {"error": str(e)}      
 
         try:
-            final_report['financial_metrics'] = self.extract_financial_metrics(financial_doc)
+            final_report['financial_metrics'] = self.extract_financial_metrics(financial_doc_)
         except Exception as e:
             final_report['financial_metrics'] = {"error": str(e)}
 
         try:
-            final_report['balance_sheet'] = self.extract_balance_sheet(financial_doc)
+            final_report['balance_sheet'] = self.extract_balance_sheet(financial_doc_)
         except Exception as e:
             final_report['balance_sheet'] = {"error": str(e)}
         try:
-            final_report['kpis'] = self.extract_kpis(financial_doc)
+            final_report['kpis'] = self.extract_kpis(financial_doc_)
 
         except Exception as e:
             final_report['kpis'] = {"error": str(e)}
 
         try:
-            final_report['valuation'] = self.extract_valuation(financial_doc)
+            final_report['valuation'] = self.extract_valuation(financial_doc_)
         except Exception as e:
             final_report['valuation'] = {"error": str(e)}
 
         try:
-            final_report['industry_benchmarks'] = self.extract_industry_benchmarks(financial_doc)   
+            final_report['industry_benchmarks'] = self.extract_industry_benchmarks(financial_doc_)   
         except Exception as e:
             final_report['industry_benchmarks'] = {"error": str(e)}
 
         try:
-            final_report['risk_factors'] = self.extract_risk_factors(financial_doc)
+            final_report['risk_factors'] = self.extract_risk_factors(financial_doc_)
         except Exception as e:
             final_report['risk_factors'] = {"error": str(e)}
 
         try:
-            final_report['cash_flow'] = self.extract_cash_flow(financial_doc)
+            final_report['cash_flow'] = self.extract_cash_flow(financial_doc_)
         except Exception as e:
             final_report['cash_flow'] = {"error": str(e)}  
 
