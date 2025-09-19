@@ -84,7 +84,7 @@ from src.BEV_Details.sql_db_operation import execute_query
 from src.login import logger
 
 class BEVDetailReportGenerationPipeline:
-    def __init__(self, file_path_or_url, ein):  
+    def __init__(self, file_path_or_url:list, ein):  
         self.file_path_or_url = file_path_or_url
         self.ein = ein
 

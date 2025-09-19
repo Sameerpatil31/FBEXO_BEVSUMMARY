@@ -43,7 +43,7 @@ class BEVDetailReportGenerationSaveDB:
     #         logger.error(f"Error retrieving PDF URL for EIN {self.ein}: {e}")
     #         return None
 
-    def get_pdf_url_by_ein(self):
+    def get_pdf_url_by_ein(self)->list:
         try:
             query = text("SELECT url FROM url_links WHERE ein = :ein")
             result = fetch_query(query, {"ein": self.ein})

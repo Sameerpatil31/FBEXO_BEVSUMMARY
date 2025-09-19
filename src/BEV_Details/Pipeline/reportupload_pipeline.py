@@ -74,7 +74,7 @@ import uuid
 from datetime import datetime
 
 class BEVReportUpload:
-    def __init__(self, file_path_or_url, output_pdf_filename=None):
+    def __init__(self, file_path_or_url:list, output_pdf_filename=None):
         self.file_path_or_url = file_path_or_url
         self.s3_uploader = s3_upload()
         

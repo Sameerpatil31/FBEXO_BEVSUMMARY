@@ -742,7 +742,28 @@ class PDFCompanyExtractor:
         return r8
     
 
-    def extract_all(self, file_path_or_url: str) -> dict:
+
+    def clean_text(self,text: str) -> str:
+        """Clean the text by replacing multiple newlines with a single newline"""
+     
+
+        # Replace multiple newlines with a single newline
+        cleaned_text = re.sub(r"\n+", "\n", text)
+        # Replace multiple spaces with a single space
+        # cleaned_text = re.sub(r"\s+", " ", cleaned_text)
+        # Replace multiple tabs with a single tab
+        # cleaned_text = re.sub(r"\t+", "\t", cleaned_text)
+        # Replace multiple carriage returns with a single carriage return
+        cleaned_text = re.sub(r"\r+", "\r", cleaned_text)
+        # Replace multiple form feeds with a single form feed
+        cleaned_text = re.sub(r"\f+", "\f", cleaned_text)
+        # Replace multiple vertical tabs with a single vertical tab
+        cleaned_text = re.sub(r"\v+", "\v", cleaned_text)
+
+        return cleaned_text
+
+
+    def extract_all(self, file_path_or_url: list) -> dict:
         """
         Extracts all financial data from the provided text in the specified JSON format.
         
@@ -755,11 +776,16 @@ class PDFCompanyExtractor:
         try:
             financial_doc_ = ""
         # Check if it's a URL or file path
-            for file_url in file_path_or_url:
-                if file_url.startswith(('http://', 'https://')):
-                    financial_doc_ += self.extract_text_from_pdf_url_temp(file_url)
-                else:
-                    financial_doc_ += self.extract_text_from_pdf(file_url)
+            if len(file_path_or_url) == 2:
+                if file_path_or_url[1].startswith(('http://', 'https://')):
+                    financial_doc_ += self.extract_text_from_pdf_url_temp(file_path_or_url[1])
+            else:
+               
+                for file_url in file_path_or_url:
+                    if file_url.startswith(('http://', 'https://')):
+                        financial_doc_ += self.extract_text_from_pdf_url_temp(file_url)
+                    else:
+                        financial_doc_ += self.extract_text_from_pdf(file_url)
 
             if not financial_doc_:
                 return {"error": "No financial data found in the document."}
@@ -770,43 +796,45 @@ class PDFCompanyExtractor:
 
         final_report = {}
 
+        financial_doc__ = self.clean_text(financial_doc_)
+
         try:
-            final_report['company_info'] = self.extract_company_info(financial_doc_)
+            final_report['company_info'] = self.extract_company_info(financial_doc__)
         except Exception as e:
             final_report['company_info'] = {"error": str(e)}      
 
         try:
-            final_report['financial_metrics'] = self.extract_financial_metrics(financial_doc_)
+            final_report['financial_metrics'] = self.extract_financial_metrics(financial_doc__)
         except Exception as e:
             final_report['financial_metrics'] = {"error": str(e)}
 
         try:
-            final_report['balance_sheet'] = self.extract_balance_sheet(financial_doc_)
+            final_report['balance_sheet'] = self.extract_balance_sheet(financial_doc__)
         except Exception as e:
             final_report['balance_sheet'] = {"error": str(e)}
         try:
-            final_report['kpis'] = self.extract_kpis(financial_doc_)
+            final_report['kpis'] = self.extract_kpis(financial_doc__)
 
         except Exception as e:
             final_report['kpis'] = {"error": str(e)}
 
         try:
-            final_report['valuation'] = self.extract_valuation(financial_doc_)
+            final_report['valuation'] = self.extract_valuation(financial_doc__)
         except Exception as e:
             final_report['valuation'] = {"error": str(e)}
 
         try:
-            final_report['industry_benchmarks'] = self.extract_industry_benchmarks(financial_doc_)   
+            final_report['industry_benchmarks'] = self.extract_industry_benchmarks(financial_doc__)
         except Exception as e:
             final_report['industry_benchmarks'] = {"error": str(e)}
 
         try:
-            final_report['risk_factors'] = self.extract_risk_factors(financial_doc_)
+            final_report['risk_factors'] = self.extract_risk_factors(financial_doc__)
         except Exception as e:
             final_report['risk_factors'] = {"error": str(e)}
 
         try:
-            final_report['cash_flow'] = self.extract_cash_flow(financial_doc_)
+            final_report['cash_flow'] = self.extract_cash_flow(financial_doc__)
         except Exception as e:
             final_report['cash_flow'] = {"error": str(e)}  
 

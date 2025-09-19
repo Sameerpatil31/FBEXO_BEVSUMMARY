@@ -380,17 +380,18 @@ def send_report(url_report: str, order_id):
     try:
         response = requests.post(url, headers=headers, json=payload)
         response.raise_for_status()  # Raise error for bad status
-        print("✅ Report sent for Notification successfully!")
-        print("Response:", response.json())
+        logger.info("✅ Report sent for Notification successfully!")
+        logger.info("Response: %s", response.json())
         return response.json()
     except requests.exceptions.RequestException as e:
-        print("❌ Error sending report:", e)
-        return None        
+        logger.error("❌ Error sending report: %s", e)
+        return None
 
 
 @app.route("/pivgenerateequest", methods=["POST"])
 @require_api_key
 def pivgenerateequest():
+    logger.info("Received /pivgenerateequest request")
     data = request.get_json(silent=True)
     if not data or "all_params" not in data:
         return jsonify({"error": "Invalid JSON"}), 400
@@ -401,7 +402,9 @@ def pivgenerateequest():
 
     job_id = str(len(JOBS) + 1)
     JOBS[job_id] = {"status": "queued"}
+    logger.info(f"Starting job {job_id} for EIN {ein} and Order ID {order_id}")
     threading.Thread(target=long_job, args=(job_id, ein, order_id), daemon=True).start()
+    logger.info(f"Job {job_id} started in background")  
 
     return jsonify({"message": "request accepted", "job_id": job_id}), 202        
 
